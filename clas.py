@@ -1,4 +1,3 @@
-# model = DecisionTreeClassifier(depth=5)                          # 决策树  depth(树的深度)
 import numpy as np
 
 # 计算基尼指数
@@ -62,7 +61,4 @@ tree = build_tree(dataset, max_depth=2)
 print(tree)
 
 
-# 随机森林 RandomForestClassifier(n_estimators=100)
-# n_estimators(树的数量)
-# XGBoot  XGBClassifier(n_estimators=200,learning_rate=0.03,depth=5,random=42)
-# learning_rate(学习率),random(随机种子)
+
