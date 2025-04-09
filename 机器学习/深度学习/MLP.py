@@ -19,6 +19,9 @@ result = perceptron.forward(sample)
 print("感知机输出:", result)
 
 
+---------------------------------------------------------------------------------------------------
+
+
 # 单层神经元
 def relu(x):                                                # 激活函数：ReLU 太 tm 重要啦
     return np.maximum(0, x)                                 # 什么？你的趋势应该是继续上升？不行，你必须是0（去死~）
@@ -37,6 +40,7 @@ sample_input = np.array([0.5, -0.2, 0.8])                   # 传入一个样本
 output = neuron.forward(sample_input)
 print("神经元输出:", output)
 
+-------------------------------------------------------------------------------------------------------------
 
 # 多层感知器
 def relu(x):                                                # 激活函数（ReLU 和 Sigmoid）
@@ -69,7 +73,7 @@ X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
 predictions = mlp.forward(X)
 print("MLP 预测输出:", predictions)
 
-
+----------------------------------------------------------------------------------------------------------------------------
 
 # 感知器示例二
 def relu(x):                                                # 激活函数
@@ -105,9 +109,9 @@ output = mlp.forward(sample_input)
 print("MLP 输出:", output)
 
 
+--------------------------------------------------------------------------------------------------------------------------------
 
-
-# 反向传播（模型的权重校准，梯度下降啊等等。。。）
+# 反向传播（模型的权重校准,梯度下降啊等等...）
 def relu(x):                            # 激活函数
     return np.maximum(0, x)
 def relu_derivative(x):
@@ -115,6 +119,9 @@ def relu_derivative(x):
 def softmax(x):
     exp_x = np.exp(x - np.max(x))  # 防止指数溢出
     return exp_x / exp_x.sum(axis=0, keepdims=True)
+
+---------------------------------------------------------------------------------------------------------------------------------
+
 # MLP 反向传播
 class MLP:
     def __init__(self, input_size, hidden_size, output_size, lr=0.01):
@@ -161,8 +168,9 @@ output = mlp.forward(sample_input)
 mlp.backward(true_label)
 print("MLP 预测输出:", output)
 
+-----------------------------------------------------------------------------------------------------------------------------------
 
-# 完整感知器
+# 一个完整感知器
 def relu(x):                                        # 激活函数
     return np.maximum(0, x)
 def sigmoid(x):
