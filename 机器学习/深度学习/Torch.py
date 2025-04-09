@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置字体
-plt.rcParams['axes.unicode_minus'] = False   # 解决负号显示问题
+plt.rcParams['font.sans-serif'] = ['SimHei']                # 设置字体
+plt.rcParams['axes.unicode_minus'] = False                  # 解决负号显示问题
 import numpy as np
 import torch                                                # PyTorch 导入
-import torch.nn as nn
-import torch.optim as optim
-import torchvision
+import torch.nn as nn                                       # 导入nn模块
+import torch.optim as optim                                 # 导入优化器模块
+import torchvision                                          # 数据
 import torchvision.transforms as transforms
 from torch.optim.lr_scheduler import StepLR
 
@@ -13,243 +13,247 @@ from torch.optim.lr_scheduler import StepLR
 
 
 # 查看状态
-# print("PyTorch 版本:", torch.__version__)
-# print("CUDA 是否可用:", torch.cuda.is_available())
-# if torch.cuda.is_available():
-#     print("CUDA 版本:", torch.version.cuda)
-#     print("GPU 数量:", torch.cuda.device_count())
-#     print("当前 GPU:", torch.cuda.get_device_name(0))
+print("PyTorch 版本:", torch.__version__)
+print("CUDA 是否可用:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("CUDA 版本:", torch.version.cuda)
+    print("GPU 数量:", torch.cuda.device_count())
+    print("当前 GPU:", torch.cuda.get_device_name(0))
 
 
 # 创建张量
-# a = torch.tensor([1.0, 2.0, 3.0])
-# print("张量 a:", a)
-#
+a = torch.tensor([1.0, 2.0, 3.0])
+print("张量 a:", a)
+
 # 创建随机张量
-# b = torch.rand(2, 3)  # 2行3列
-# print("随机张量 b:\n", b)
-#
+b = torch.rand(2, 3)  # 2行3列
+print("随机张量 b:\n", b)
+
 # 创建全 0 或全 1 张量
-# c = torch.zeros(3, 3)
-# d = torch.ones(2, 2)
-# print("全 0 张量 c:\n", c)
-# print("全 1 张量 d:\n", d)
-#
+c = torch.zeros(3, 3)
+d = torch.ones(2, 2)
+print("全 0 张量 c:\n", c)
+print("全 1 张量 d:\n", d)
+
 # 创建单位矩阵
-# e = torch.eye(3)  # 3x3 单位矩阵
-# print("单位矩阵 e:\n", e)
-#
+e = torch.eye(3)  # 3x3 单位矩阵
+print("单位矩阵 e:\n", e)
+
 # 生成 GPU 张量
-# gpu_tensor = torch.tensor([1, 2, 3], device="cuda")  # 直接在 GPU 上创建
-# print("GPU 张量:", gpu_tensor)
+gpu_tensor = torch.tensor([1, 2, 3], device="cuda")  # 直接在 GPU 上创建
+print("GPU 张量:", gpu_tensor)
 
 
 # 基本数学运算
-# a = torch.tensor([1, 2, 3])
-# b = torch.tensor([4, 5, 6])
-#
-# # 加法
-# print("加法:", a + b)
-#
-# # 减法
-# print("减法:", a - b)
-#
-# # 乘法（逐元素相乘）
-# print("乘法:", a * b)
-#
-# # 除法
-# print("除法:", a / b)
-#
-# # 幂运算
-# print("平方:", a ** 2)
+a = torch.tensor([1, 2, 3])
+b = torch.tensor([4, 5, 6])
+
+# 加法
+print("加法:", a + b)
+
+# 减法
+print("减法:", a - b)
+
+# 乘法（逐元素相乘）
+print("乘法:", a * b)
+
+# 除法
+print("除法:", a / b)
+
+# 幂运算
+print("平方:", a ** 2)
 
 # 矩阵运算
-# A = torch.tensor([[1, 2], [3, 4]])
-# B = torch.tensor([[5, 6], [7, 8]])
-#
-# # 矩阵加法
-# print("矩阵加法:\n", A + B)
-# # 矩阵乘法（逐元素）
-# print("逐元素乘法:\n", A * B)
-# # 矩阵点积（矩阵乘法）
-# print("矩阵点积:\n", torch.matmul(A, B))  # 或者 A @ B
-# # 计算矩阵转置
-# print("矩阵转置:\n", A.T)
+A = torch.tensor([[1, 2], [3, 4]])
+B = torch.tensor([[5, 6], [7, 8]])
 
-# torch.transpose(A,dim0,dim1)  # 更高级的转置，对shape进行操作，交换dim0 和 dim1 的位置,适用于高维度
+# 矩阵加法
+print("矩阵加法:\n", A + B)
+# 矩阵乘法（逐元素）
+print("逐元素乘法:\n", A * B)
+# 矩阵点积（矩阵乘法）
+print("矩阵点积:\n", torch.matmul(A, B))  # 或者 A @ B
+# 计算矩阵转置
+print("矩阵转置:\n", A.T)
+
+torch.transpose(A,dim0,dim1)  # 更高级的转置，对shape进行操作，交换dim0 和 dim1 的位置,适用于高维度
 
 
 # 使用GPU加速运算
-# if torch.cuda.is_available():      # 确保 CUDA 可用
-#     device = torch.device("cuda")  # 选择 GPU
-# else:
-#     device = torch.device("cpu")   # 选择 CPU
-# # 在 GPU 上创建张量
-# A = torch.rand(1000, 1000, device=device)
-# B = torch.rand(1000, 1000, device=device)
-# # GPU 加速矩阵乘法
-# C = torch.matmul(A, B)
+if torch.cuda.is_available():      # 确保 CUDA 可用
+    device = torch.device("cuda")  # 选择 GPU
+else:
+    device = torch.device("cpu")   # 选择 CPU
+# 在 GPU 上创建张量
+A = torch.rand(1000, 1000, device=device)
+B = torch.rand(1000, 1000, device=device)
+# GPU 加速矩阵乘法
+C = torch.matmul(A, B)
 # print("计算完成，张量在设备:", C.device)
 
 
 # 自动求导（Autograd）
-# x = torch.tensor(2.0, requires_grad=True)       # 创建一个可计算梯度的张量
-# # 计算 y = x^2
-# y = x ** 2
-# # 反向传播（计算 dy/dx）
-# y.backward()
-# # 输出梯度(导数)
-# print("x 的梯度:", x.grad)  # x 的梯度: tensor(4.)     # 2*x = 4
+x = torch.tensor(2.0, requires_grad=True)       # 创建一个可计算梯度的张量
+# 计算 y = x^2
+y = x ** 2
+# 反向传播（计算 dy/dx）
+y.backward()
+# 输出梯度(导数)
+print("x 的梯度:", x.grad)  # x 的梯度: tensor(4.)     # 2*x = 4
 
 
 # 计算多变量梯度
-# x = torch.tensor(3.0, requires_grad=True)
-# # 计算 z = x^2 + 3x + 5
-# z = x**2 + 3*x + 5
-# # 反向传播
-# z.backward()
-# # 输出梯度
-# print("x 的梯度:", x.grad)  # x 的梯度: tensor(9.)     # 2*x + 3 = 2*3 + 3 = 9
+x = torch.tensor(3.0, requires_grad=True)
+# 计算 z = x^2 + 3x + 5
+z = x**2 + 3*x + 5
+# 反向传播
+z.backward()
+# 输出梯度
+print("x 的梯度:", x.grad)  # x 的梯度: tensor(9.)     # 2*x + 3 = 2*3 + 3 = 9
 
 
-# 计算多个输出对多个输入的梯度
-# x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
-# # 计算 y = x^2
-# y = x ** 2
-# # 反向传播（对 y 的所有元素求梯度）
-# y.backward(gradient=torch.ones_like(y))
-# print("x 的梯度:", x.grad)  # x 的梯度: tensor([2., 4., 6.])      # 2*x
+计算多个输出对多个输入的梯度
+x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
+# 计算 y = x^2
+y = x ** 2
+# 反向传播（对 y 的所有元素求梯度）
+y.backward(gradient=torch.ones_like(y))
+print("x 的梯度:", x.grad)  # x 的梯度: tensor([2., 4., 6.])      # 2*x
 
 
 # 关闭梯度计算（加速推理）
-# x = torch.tensor(5.0, requires_grad=True)
-# with torch.no_grad():
-#     y = x ** 2
-#     print(y)  # 25.0，但不会计算梯度
+x = torch.tensor(5.0, requires_grad=True)
+with torch.no_grad():
+    y = x ** 2
+    print(y)  # 25.0，但不会计算梯度
 
+------------------------------------------------------------------------------------------------------------
 
 # 训练线性回归模型
-# x_train = torch.tensor([[1.0], [2.0], [3.0], [4.0]])  # 输入 x
-# y_train = torch.tensor([[5.0], [7.0], [9.0], [11.0]]) # 目标 y = 2x + 3
-#
-# # 定义模型（线性回归 y = Wx + b）
-# W = torch.randn(1, requires_grad=True)  # 初始化权重
-# b = torch.randn(1, requires_grad=True)  # 初始化偏置
-#
-# # 训练循环
-# learning_rate = 0.01
-# epochs = 100  # 训练 100 轮
-#
-# for epoch in range(epochs):
-#     # 计算预测值
-#     y_pred = W * x_train + b
-#
-#     # 计算损失（均方误差 MSE）
-#     loss = ((y_pred - y_train) ** 2).mean()
-#
-#     # 反向传播计算梯度
-#     loss.backward()
-#
-#     # 更新参数（手动梯度下降）
-#     with torch.no_grad():
-#         W -= learning_rate * W.grad
-#         b -= learning_rate * b.grad
-#
-#     # 清空梯度（避免累积）
-#     W.grad.zero_()
-#     b.grad.zero_()
-#
-#     # 每 10 轮打印一次损失
-#     if (epoch + 1) % 10 == 0:
-#         print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}, W: {W.item():.4f}, b: {b.item():.4f}")
-#
-# # 训练完成后，看看最终的 W 和 b
-# print("\n训练完成！")
-# print(f"最终 W: {W.item():.4f}, b: {b.item():.4f}")
+x_train = torch.tensor([[1.0], [2.0], [3.0], [4.0]])  # 输入 x
+y_train = torch.tensor([[5.0], [7.0], [9.0], [11.0]]) # 目标 y = 2x + 3
 
+# 定义模型（线性回归 y = Wx + b）
+W = torch.randn(1, requires_grad=True)  # 初始化权重
+b = torch.randn(1, requires_grad=True)  # 初始化偏置
+
+# 训练循环
+learning_rate = 0.01
+epochs = 100  # 训练 100 轮
+
+for epoch in range(epochs):
+    # 计算预测值
+    y_pred = W * x_train + b
+
+    # 计算损失（均方误差 MSE）
+    loss = ((y_pred - y_train) ** 2).mean()
+
+    # 反向传播计算梯度
+    loss.backward()
+
+    # 更新参数（手动梯度下降）
+    with torch.no_grad():
+        W -= learning_rate * W.grad
+        b -= learning_rate * b.grad
+
+    # 清空梯度（避免累积）
+    W.grad.zero_()
+    b.grad.zero_()
+
+    # 每 10 轮打印一次损失
+    if (epoch + 1) % 10 == 0:
+        print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}, W: {W.item():.4f}, b: {b.item():.4f}")
+
+# 训练完成后，看看最终的 W 和 b
+print("\n训练完成！")
+print(f"最终 W: {W.item():.4f}, b: {b.item():.4f}")
+
+----------------------------------------------------------------------------------------------------------------
 
 # nn.Module
-
 # 准备数据
-# x_train = torch.tensor([[1.0], [2.0], [3.0], [4.0]])
-# y_train = torch.tensor([[5.0], [7.0], [9.0], [11.0]])  # y = 2x + 3
+x_train = torch.tensor([[1.0], [2.0], [3.0], [4.0]])
+y_train = torch.tensor([[5.0], [7.0], [9.0], [11.0]])  # y = 2x + 3
 
 # 定义神经网络（继承 nn.Module）
-# class LinearRegressionModel(nn.Module):
-#     def __init__(self):
-#         super(LinearRegressionModel, self).__init__()
-#         self.linear = nn.Linear(1, 1)  # 线性层：输入 1 维，输出 1 维
-#
-#     def forward(self, x):
-#         return self.linear(x)
-# 创建模型
-# model = LinearRegressionModel()
-#
-# # 定义损失函数和优化器
-# criterion = nn.MSELoss()  # 均方误差损失
-# optimizer = optim.SGD(model.parameters(), lr=0.01)  # 随机梯度下降（SGD）
-#
-# # 训练模型
-# epochs = 100
-# for epoch in range(epochs):
-#     # 前向传播
-#     y_pred = model(x_train)
-#     loss = criterion(y_pred, y_train)
-#
-#     # 反向传播 & 更新参数
-#     optimizer.zero_grad()  # 清空梯度
-#     loss.backward()  # 计算梯度
-#     optimizer.step()  # 更新参数
-#
-#     # 每 10 轮打印一次损失
-#     if (epoch + 1) % 10 == 0:
-#         print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
-#
-# # 训练完成
-# print("\n训练完成！模型参数:")
-# for name, param in model.named_parameters():
-#     print(f"{name}: {param.item():.4f}")
+class LinearRegressionModel(nn.Module):
+    def __init__(self):
+        super(LinearRegressionModel, self).__init__()
+        self.linear = nn.Linear(1, 1)                        # 线性层：输入 1 维，输出 1 维
 
+    def forward(self, x):
+        return self.linear(x)
+      
+# 创建模型
+model = LinearRegressionModel()
+
+# 定义损失函数和优化器
+criterion = nn.MSELoss()                                    # 均方误差损失
+optimizer = optim.SGD(model.parameters(), lr=0.01)          # 随机梯度下降（SGD）
+
+# 训练模型
+epochs = 100
+for epoch in range(epochs):
+    # 前向传播
+    y_pred = model(x_train)
+    loss = criterion(y_pred, y_train)
+
+    # 反向传播 & 更新参数
+    optimizer.zero_grad()            # 清空梯度
+    loss.backward()                  # 计算梯度
+    optimizer.step()                 # 更新参数
+
+    # 每 10 轮打印一次损失
+    if (epoch + 1) % 10 == 0:
+        print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
+
+# 训练完成
+print("\n训练完成！模型参数:")
+for name, param in model.named_parameters():
+    print(f"{name}: {param.item():.4f}")
+
+
+----------------------------------------------------------------------------------------------------------
 
 # 感知器模型
-# x_train = torch.linspace(-1, 1, 100).reshape(-1, 1)  # 100 个点，形状 (100, 1)   # 生成数据（模拟非线性关系）
-# y_train = x_train**3 + 0.3 * torch.randn(x_train.size())  # 目标 y = x^3 + 噪声
-#
-# # 定义 MLP 神经网络（多层感知机）
-# class MLP(nn.Module):
-#     def __init__(self):
-#         super(MLP, self).__init__()
-#         self.hidden = nn.Linear(1, 10)  # 隐藏层：1 输入 -> 10 神经元
-#         self.output = nn.Linear(10, 1)  # 输出层：10 -> 1
-#
-#     def forward(self, x):
-#         x = torch.relu(self.hidden(x))  # ReLU 激活
-#         x = self.output(x)  # 输出层（回归任务，不用 Softmax）
-#         return x
-#
-# # 创建 MLP 模型
-# model = MLP()
-#
-# # 定义损失函数 & 优化器
-# criterion = nn.MSELoss()  # 均方误差（MSE）
-# optimizer = optim.Adam(model.parameters(), lr=0.01)  # Adam 优化器
-#
-# # 训练模型
-# epochs = 1000  # 训练 1000 轮
-# for epoch in range(epochs):
-#     y_pred = model(x_train)  # 前向传播
-#     loss = criterion(y_pred, y_train)  # 计算损失
-#
-#     optimizer.zero_grad()  # 清空梯度
-#     loss.backward()  # 计算梯度
-#     optimizer.step()  # 更新参数
-#
-#     if (epoch + 1) % 100 == 0:
-#         print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
-#
-# # 训练完成
-# print("\n训练完成！")
-# for name, param in model.named_parameters():
-#     print(f"{name} 平均值: {param.mean().item():.4f}")
+x_train = torch.linspace(-1, 1, 100).reshape(-1, 1)              # 生成数据（模拟非线性关系）目标：100 个点，形状 (100, 1)
+y_train = x_train**3 + 0.3 * torch.randn(x_train.size())         # 目标 y = x^3 + 噪声
+
+# 定义 MLP 神经网络（多层感知机）
+class MLP(nn.Module):
+    def __init__(self):
+        super(MLP, self).__init__()
+        self.hidden = nn.Linear(1, 10)      # 隐藏层：1 输入 -> 10 神经元
+        self.output = nn.Linear(10, 1)      # 输出层：10 -> 1
+
+    def forward(self, x):
+        x = torch.relu(self.hidden(x))      # ReLU 激活
+        x = self.output(x)                  # 输出层（回归任务，不用 Softmax）
+        return x
+
+# 创建 MLP 模型
+model = MLP()
+
+# 定义损失函数 & 优化器
+criterion = nn.MSELoss()                                  # 均方误差（MSE）
+optimizer = optim.Adam(model.parameters(), lr=0.01)       # Adam 优化器
+
+# 训练模型
+epochs = 1000                            # 训练 1000 轮
+for epoch in range(epochs):
+    y_pred = model(x_train)              # 前向传播
+    loss = criterion(y_pred, y_train)    # 计算损失
+
+    optimizer.zero_grad()                # 清空梯度
+    loss.backward()                      # 计算梯度
+    optimizer.step()                     # 更新参数
+
+    if (epoch + 1) % 100 == 0:
+        print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
+
+# 训练完成
+print("\n训练完成！")
+for name, param in model.named_parameters():
+    print(f"{name} 平均值: {param.mean().item():.4f}")
 plt.title(f"预测结果: {predicted.item()} (真实: {label})")
 plt.show()
