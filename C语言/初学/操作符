@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // -------- 1. 算术运算符 --------
+    int a = 10, b = 3;
+    printf("算术运算符:\n");
+    printf("a + b = %d\n", a + b);   // 加法：13
+    printf("a - b = %d\n", a - b);   // 减法：7
+    printf("a * b = %d\n", a * b);   // 乘法：30
+    printf("a / b = %d\n", a / b);   // 除法：3（整除）
+    printf("a %% b = %d\n", a % b);  // 取模：1（注意%%转义）
+
+    // -------- 2. 赋值运算符 --------
+    int x = 5;
+    x += 2;   // 等同于 x = x + 2
+    printf("\n赋值运算符:\n");
+    printf("x += 2 -> %d\n", x);  // 输出 7
+
+    x *= 3;   // x = x * 3
+    printf("x *= 3 -> %d\n", x);  // 输出 21
+
+    // -------- 3. 比较运算符 --------
+    printf("\n比较运算符:\n");
+    printf("a == b: %d\n", a == b);  // 0（false）
+    printf("a != b: %d\n", a != b);  // 1（true）
+    printf("a > b: %d\n", a > b);    // 1
+    printf("a < b: %d\n", a < b);    // 0
+    printf("a >= b: %d\n", a >= b);  // 1
+    printf("a <= b: %d\n", a <= b);  // 0
+
+    // -------- 4. 逻辑运算符 --------
+    int truth = 1, falsy = 0;
+    printf("\n逻辑运算符:\n");
+    printf("truth && falsy: %d\n", truth && falsy); // 0
+    printf("truth || falsy: %d\n", truth || falsy); // 1
+    printf("!truth: %d\n", !truth);                 // 0
+
+    // -------- 5. 位运算符 --------
+    int m = 6, n = 3; // 二进制：m=110, n=011
+    printf("\n位运算符:\n");
+    printf("m & n = %d\n", m & n);  // 110 & 011 = 010 -> 2
+    printf("m | n = %d\n", m | n);  // 110 | 011 = 111 -> 7
+    printf("m ^ n = %d\n", m ^ n);  // 110 ^ 011 = 101 -> 5
+    printf("~m = %d\n", ~m);        // ~110 = 反码（看平台补码表现）
+    printf("m << 1 = %d\n", m << 1); // 左移：110 -> 1100 = 12
+    printf("m >> 1 = %d\n", m >> 1); // 右移：110 -> 11 = 3
+
+    // -------- 6. 自增自减运算符 --------
+    int z = 5;
+    printf("\n自增自减运算符:\n");
+    printf("z++ = %d\n", z++); // 先返回 z，再加1（输出5）
+    printf("++z = %d\n", ++z); // 先加1，再返回 z（输出7）
+
+    // -------- 7. 条件（三目）运算符 --------
+    int max = (a > b) ? a : b;
+    printf("\n三目运算符:\n");
+    printf("较大值是: %d\n", max);  // 输出 10
+
+    // -------- 8. sizeof 运算符 --------
+    char s[] = "hi";  // 实际长度是 3（h, i, \0）
+    printf("\nsizeof 运算符:\n");
+    printf("sizeof(s): %lu\n", sizeof(s));     // 输出 3（数组总长度）
+    printf("strlen(s): %lu\n", strlen(s));     // 输出 2（不含 \0）
+
+    // -------- 9. 指针运算符 --------
+    int val = 42;
+    int *p = &val;
+    printf("\n指针运算符:\n");
+    printf("val 的地址: %p\n", (void*)&val);
+    printf("指针p的值: %p\n", (void*)p);
+    printf("*p 解引用: %d\n", *p);  // 输出 42
+
+    // -------- 10. 逗号运算符 --------
+    int result;
+    result = (1 + 2, 3 + 4);  // 执行1+2后忽略，取3+4结果
+    printf("\n逗号运算符:\n");
+    printf("result = %d\n", result);  // 输出 7
+
+    return 0;
+}
