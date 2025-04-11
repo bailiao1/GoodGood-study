@@ -27,7 +27,7 @@ print(2 <= 2)                                                   # True
 
 # 逻辑运算符：
 
-# and: 连接多个判断，它们必须全部成立，一个为False，结果就是False
+# and: 连接多个判断，它们必须全部成立(为真). 只要一个判断的结果为False(假)，输出就是False
 print( 3>2 and 2<3)                                               # True (and)
 # and 会返回第一个为 False 的值，或者最后一个值：
 print(1 and 2)                                                    # 2 (两个都为真，返回最后一个)
