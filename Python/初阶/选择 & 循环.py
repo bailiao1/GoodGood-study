@@ -53,17 +53,30 @@ for i in range(1,10):                                # 外循环生成1-9
         print(f"{j}*{i}={j*i}",end=' ')              # 循环体(最终执行 j (9+8+7+6+5+4+3+2+1)次，生成九九乘法表)
     print("\n")                                      # 这是外循环的循环体(只会执行 i (9)次)
 
+# enumerate():返回索引与值
+lst = ["apple", "banana", "cherry"]
+for index, value in enumerate(lst):                    # 0:apple  1:banana  2:cherry
+    print(index, value,sep=':',end="\t")
+
+
+# zip 同步遍历
+names = ["a", "b", "c"]
+scores = [60, 70, 80]
+for name, score in zip(names, scores):                  # a 60	b 70	c 80
+    print(name, score,end="\t")
+
+
 
 # for循环还可以迭代器取值(可迭代对象(iterator)：能够“一个一个”取出值的对象，就是可迭代对象，可以被 for 循环处理。)
 
-for i in "Hello World":                              # H_l_l_o_ _(e被跳过，W之后(包括W都被截断))
+for i in "Hello World":                                    # H_l_l_o_ _(e被跳过，W之后(包括W都被截断))
     if i == 'e':
-        continue                                     # continue：遇到某条件，直接跳过当前循环，进入下一轮
+        continue                                           # continue：遇到某条件，直接跳过当前循环，进入下一轮
     elif i == 'W':
-        break                                        # break：遇到某条件，直接退出循环(直接结束)
+        break                                              # break：遇到某条件，直接退出循环(直接结束)
     print(i,end='_')
 
-print("\n")                                          # 手动打印换行符
+print("\n")                                                # 手动打印换行符
 
 a = {"name":"bai","age":18,"weight":55,"height":111}
 for k, v in a.items():                               # 可以多变量同步
@@ -72,6 +85,14 @@ for k, v in a.items():                               # 可以多变量同步
 # 常见的可迭代对象有：字符串(str),列表(list),字典(dict),元组(tuple),集合(set),range对象,文件(file)...
 # 不可迭代的对象就是那些分不开的玩意：单个数值(int、float、boolean、none_type)...
 # 之后还有自定义迭代器类。。。(学个屁编程，这么多概念怎么记？)
+
+# 小拓展：判断迭代器类型
+from collections.abc import Iterable                 # 只需要先导入迭代器的type
+print(isinstance("Hello", Iterable))                 # isinstance类型判断：可以用于判断int,str等等类型
+print(isinstance(123, Iterable))                     # False
+
+
+#---------------------------------------------------------------------------------------------------------------------------------
 
 
 
