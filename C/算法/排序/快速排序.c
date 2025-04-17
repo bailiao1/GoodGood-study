@@ -11,17 +11,18 @@ void temp(int* a, int* b)                                                      /
 int opp(int arr[],int left,int right)                                          // 分割数组
 {                                                              
   int i = left - 1;                                                            // 构建一个变量，用于记录交换位置
-
-  for (int j = left; j < right; j++)                                           // 构建循环，遍历数组，每个数都要与定义的 中间数/分类点（默认使用最右/左的值）对比大小
+  int pivot = arr[right];                                                      // 默认使用最右的值作为分类点（pivot）
+  
+  for (int j = left; j < right; j++)                                           // 构建循环，遍历数组，每个数都要与定义的 分类点 对比大小
     {
-      if (arr[j] <= arr[right])                                                // 如果当前的值比最（右）的值小
+      if (arr[j] <= pivot)                                                     // 如果当前的值比 pivot 小
       {
         i++;                                                                   // 触发条件，i+1
         temp(&arr[j] , &arr[i]);                                               // 当前值前移（小数前移，大数后迁，升序）
       }
     }
-  temp(&arr[i+1],&arr[right]);                                                 // 对比结束，现在比arr[right]小的值都在数组前部分，每一次触发，i就会后移一位，现在的位置也到了最后一个比arr[right]小的索引，我们将中间数插入，大值移到末尾
-  return i+1;                                                                  // 分类完成，将中间数（arr[right]）的索引返回主函数（a~b < 中间数 < c~d）
+  temp(&arr[i+1],&arr[right]);                                                 // 对比结束，现在比 分类点（arr[right]）小的值都在数组前部分。  且每一次触发，i 就会后移一位，现在的位置也到了最后一个比分类点小的索引，我们将分类点的值插入，大值移到末尾
+  return i+1;                                                                  // 分类完成，将 分类点 的索引返回主函数（a~b < 中间数 < c~d）
 }
 
 
@@ -29,7 +30,7 @@ void kuai(int arr[],int left,int right)                                        /
 {  
   if (left < right)                                                            // 递归结束条件（直到数组被分的不可再分，也就是只剩一个数时（arr[0] == arr[0]））
   {
-    int p = opp(arr,left,right);                                               // 找到pivot
+    int p = opp(arr,left,right);                                               // 找到 pivot
     kuai(arr, left, p-1);                                                      // 递归使用pi分类左数组（left(0) ,  p-1）                // 将数组不断细分，不断使用新的中间数，插入正确的位置，不再参与排序，递归深处的数组范围只会越来越小（-=1）   
     kuai(arr, p+1, right);                                                     // 递归使用pi分类右数组（p+1 ， right(size - 1)）        // 分类点（pivot）也会越来越靠近边界（left/right），直到重合。                                                                                                                                    
   }                                                                                                                                   // 最终每个数都成为一次分类点，找到了正确的位置，数组的位置也就排序完成了
@@ -72,16 +73,17 @@ void three_getone(int arr[], int left, int right)
     if (arr[mid] > arr[right])
         temp(&arr[mid], &arr[right]);
 
-    // 最后把中间值（原来在 mid）换到 right，适配后续流程                        
-    temp(&arr[mid], &arr[right]);                
+    // 最后把中间值（原来在 mid）换到 right-1，毕竟已经知道right比mid大，那我们提前减少一次迭代对比                  
+    temp(&arr[mid], &arr[right-1]);                
 }
 
-// 直接在opp中，一步调整数组：
+// 接下来在opp中，调整数组：
 int opp(int arr[],int left,int right)
 {                                                              
-  three_getone(arr,left,right)                                                 // 只需要添加这一步，固定right就会被改成中间数owo
-  int i = left - 1;                                                            // 剩下的过程，全都不需要改变
-//......
+  three_getone(arr,left,right);                                                // 先用三数取中调整数组
+  int pivot = arr[right - 1];                                                  // 定义 分类点（pivot）      
+  int i = left - 1;                                                            
+
+  for (int j = left; j < right-1; j++);                                        // 调整for循环范围，right 已知比 pivot（right-1）大了
+//......                                                                       // 好啦，剩下都不用变了（但稳定性提升了许多owo）
 }
-
-
