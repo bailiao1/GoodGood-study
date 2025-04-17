@@ -69,4 +69,12 @@ print(b is c)                                                      # True (pytho
 
 a = [1,2]                                                          # 但缓存机制不可能全给你存了(默认只会缓存-5 to 256之间的整数,还有部分场景的一些简单的字符串)
 b = [1,2]                                                          # is判断的还是引用，而非它们的数值
-print(a is b)                                                      # False (此刻ab被分别创建，且各自分配了一块内存)
+print(a is not b)                                                  # True (此刻ab被分别创建，且各自分配了一块内存)，is需要修饰在not前
+
+
+# in：判断某某中是否包含某某
+a = [1,2,3]
+b = "Hello"
+
+print(1 in a)                                                       # True
+print("W" not in a)                                                 # True
