@@ -47,11 +47,11 @@ List headcha(List list, int v)
 void dayin(Node* head)
 {
     if (head == NULL) return;
-
-    Node* c = head;
+    Node* c;
     do {
+        c = head;
         printf("%d <=> ", c->data);
-        c = c->next;
+        head = head -> next;
     } while (c != head);
     printf("(back to head)\n");
 }
@@ -61,14 +61,13 @@ void shan(Node* head)
 {
     if (head == NULL) return;
 
-    Node* start = head;
-    Node* next;
-
+    Node* c;
     do {
-        next = head->next;
-        free(head);
-        head = next;
-    } while (head != start);
+        c = head;
+        head = head -> next;
+        free(c);
+    } while (c != head);
+    printf("(删光了)\n");
 }
 
 
