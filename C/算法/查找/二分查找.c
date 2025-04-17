@@ -16,7 +16,7 @@ int main()
   
     while (left <= right)
     {
-        int mid = (left + right) / 2; 
+        int mid = left + (right - left)/2 ;             // 等价于 (left + right)/2 但防止栈溢出
 
         if (arr[mid] == target)
         {
