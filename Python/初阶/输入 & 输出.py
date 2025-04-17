@@ -4,6 +4,46 @@ b = [3,4]
 print("Hello","world",1,a,b,sep="_",end="。")                 # sep: 字符间以什么分隔
 #        Hello_world_1_2.1_[3, 4]。                           # end：以什么结尾，默认\n换行符
 
+
+# 字符串操作
+# "+":在print中可以连接字符串
+print("Hello wo" + "rld")                                      # Hello world
+
+# "*"：字符串重复输出n条
+print("Hello!" * 3,end=' ')                                    # Hello!Hello!Hello!
+
+# "\t" :制表符(打一个tap空)
+print("Hello\tWorld")                                          # Hello  World
+
+# "\n" :换行符(字符串末尾默认使用)
+print("Hello\nWorld")                                          # Hello
+                                                               # World
+
+# ","  :在print中用逗号分隔，会自动加空格
+print("Hello","World")                                         # Hello World
+
+
+# 索引与切片：从字符串(不止于str)中获取指定字符
+a = "Hello World"                                              # 将字符串存入变量
+print(a[0])                                                    # 获取单个字符(索引从0开始：0,1,2,3...)这里获取开头字符‘H’
+print(a[-1])                                                   # 当索引为负数时，获取倒数第n个字符。这里是结尾字符‘d’
+
+print(a[1:3])                                                  # 获取 索引1 到 索引2 的切片：el (切片获取：包前不包后)
+
+print(a[0:11:2])                                               # HloWrd
+                                                               # (start:end:step):在这里是每两个数，从 索引0 到 索引10 取出一个值。
+
+
+# in：如果字符串中包含(某段/某词),输出True，否则False
+print("H" in "Hello")                                             # True
+
+print("he" in "Hello")                                            # False (大写字母与小写字母是完全不同的字符)
+print("llo" in "Hello")                                           # True
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 # input:输入操作,但输入格式位字符串格式...如需要，请自行转换
 input()
 
