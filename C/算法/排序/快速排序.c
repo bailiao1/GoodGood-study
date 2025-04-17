@@ -55,29 +55,32 @@ int main()
 
 //-----------------------------------------------------------------------------------------------------------
 
-// 当基础版快排遇到一些场景(如数组已排序)，由于pivot的固定，就会发生左边的数一直比右边小，流程一直被跳，所有工作都交给了左递归，导致效率退化(每轮只能-=1)。所以我们可以引入pivot选择优化：
+// 当基础版快排遇到一些场景(如数组已排序)，由于pivot的固定，就会发生左边的数一直比右边小，流程一直被跳。
+// 所有工作都交给了左递归，导致效率退化(变成链式递归，深度 O(n)，直接从快排退化为冒泡排序的效率 O(n²))。
+// 所以我们可以引入pivot选择优化: “避免 pivot 选得太偏”，让左右两边划分得更平衡
 
-// 三数取中法优化 pivot 选择
+
+// 三数取中法
 void three_getone(int arr[], int left, int right)
 {
     int mid = (left + right) / 2;                            // 选择中间的索引
 
-    if (arr[left] > arr[mid])                                // 进一步优化，保证 arr[left] < arr[mid] < arr[right]
+    if (arr[left] > arr[mid])                                // 先一步保证 arr[left] < arr[mid] < arr[right]
         temp(&arr[left], &arr[mid]);
     if (arr[left] > arr[right])
         temp(&arr[left], &arr[right]);
     if (arr[mid] > arr[right])
         temp(&arr[mid], &arr[right]);
 
-    // 把中间值（原来在 mid）换到 right                         
-    temp(&arr[mid], &arr[right]);                           // 最后我们再把中间的值再换到right位置（直接适配后续流程）
+    // 最后把中间值（原来在 mid）换到 right，适配后续流程                        
+    temp(&arr[mid], &arr[right]);                
 }
 
-// 最后直接在opp中，先一步调整数组：
+// 直接在opp中，一步调整数组：
 int opp(int arr[],int left,int right)
 {                                                              
-  three_getone(arr,left,right)                                                 // 只需要添加这一部，固定right就会被改成中间数owo
-  int i = left - 1;                                                            // 剩下的全都不用改变
+  three_getone(arr,left,right)                                                 // 只需要添加这一步，固定right就会被改成中间数owo
+  int i = left - 1;                                                            // 剩下的过程，全都不需要改变
 //......
 }
 
