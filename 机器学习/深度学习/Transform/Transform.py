@@ -30,7 +30,7 @@ class SelfAttention(nn.Module):
         out = torch.matmul(attention, V)                    # 将概率带回，计算V，得到最终答案
         return self.fc_out(out)                             # 将形状调回，继续之后计算
 
-# ransformer 编码器
+# tansformer 编码器
 class TransformerBlock(nn.Module):
     def __init__(self, embed_size, heads, dropout, forward_expansion):
 # embed_size：输入数据的维度（特征数）
