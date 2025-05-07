@@ -114,6 +114,11 @@ print(f(3))                    # 输出 8，其实就是 5 + 3
 #------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+# lambda:便捷函数
+
+
+
+
 # 小扩展
 
 # global：修改全局变量(告诉函数，不需要创建新变量，直接去全局里找)
@@ -137,6 +142,29 @@ def outer():
     print(x)                    # 1
     
 outer()    
+
+
+# 装饰器(装饰器本质就是一个函数，它用来包装另一个函数，在不改变原函数代码的前提下，为其增加功能。)
+def say_hi(name):               # 原函数
+    return f"Hi, {name}!"
+
+def my_decorator(func):         # 定义一个接收函数的装饰器
+    def wrapper(name):
+        print("开始")            # 开始
+        result = func(name)     # Hi,Doro!
+        print("结束")            # 结束
+        return
+    return wrapper
+
+say_hi = my_decorator(say_hi)    # 组装
+
+# 语法糖(常用，直接把装饰器用＠装到原函数头上，直接调用原函数，但拥有装饰后的效果)
+@my_decorator                   # 等价于 say_hi = my_decorator(say_hi)
+def say_hi(name):
+    return(f"Hi, {name}!")
+    
+print(say_hi("Doro"))
+
 
 
 
