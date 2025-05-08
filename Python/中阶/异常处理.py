@@ -5,16 +5,19 @@
 
 # 法一
 try:                     
-    print(a)                # 这里的 a 还没定义，所以会报：NameError: name 'a' is not defined
+    print(a)                    # 这里的 a 还没定义，所以会报：NameError: name 'a' is not defined
 except:                  
-    print("出现错误")        # 出现错误(没报错，只是执行了这个print)
+    print("出现错误")            # 出现错误(没报错，只是执行了这个print)
 
 # 法二（加入指定错误捕捉：只有指定的错误出现，才会被捉住，出现其他异常的话，还是会爆红）
 try:
     print(a)
-except NameError as e:      # 指定捕获异常类型为NameError，取别名为e ( 如果没取别名，直接在下面使用print(NameError)，只会打印错误的类型：<class 'NameError'> )
-    print(e)                # name 'a' is not defined,提醒了，但没报错
-  
+except NameError as e:                  # 指定捕获异常类型为NameError，取别名为e ( 如果没取别名，直接在下面使用print(NameError)，只会打印错误的类型：<class 'NameError'> )
+    print(e)                            # name 'a' is not defined,提醒了，但没报错
+    print("异常属性：", type(e).__name__)          # NameError                    # e 同样可以打印异常的属性
+    print("异常说明：", str(e))                    # name 'a' is not defined      # 异常的说明
+    print("参数列表：", e.args)                    # 参数列表： ("name 'a' is not defined",)        # 如果报错的参数不止一个，都会写进这个元组
+
 # 法三(Exception 万能捕捉。可以捕获任意异常)
 try:
     print(a)
@@ -120,3 +123,21 @@ def login():
         except Exception as e:           # 在函数内捕获异常，防止raise结束代码，被迫终止
             print(e)
 print(login())                           # return不会显示返回值，需要打印。
+
+
+#---------------------------------------------------------------------------------------------------------------
+
+# 小扩展
+
+# 异常类型
+
+
+
+
+
+# 一些罕见的异常属性(...至今没用过)
+# .__cause__	    如果是由另一个异常引发的，会记录原异常
+# .__context__	    上下文中前一个异常（嵌套异常）
+# .__traceback__	包含 traceback 对象（调用栈）, 查源头定位
+
+
