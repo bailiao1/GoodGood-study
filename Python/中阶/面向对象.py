@@ -241,132 +241,137 @@ class Father():                   # 父类
         
 class Son(Father):
     def money(self):              # 定义子类同名方法(默认覆盖)
-        Father.money(self)        # 第一种方法：保留父类方法(手动调用)
+        Father.money(self)        # 第一种方法：手动调用父类方法(Father这是类名啊，不是固定的)
         super().money()           # 第二种方法，super调用父类————简写版
-        super(Son,self).money()   # 或 supper 完整写法
-        print("一千万")
+        super(Son,self).money()   # 或 supper 完整写法(class(指定类),self(实例对象))
+        
+        print("一千万")           ＃ 这行才是子类自己的代码块
+        
 bai = Son()
 bai.money()     # 一百万 / 一千万
 
 class Grandson(Son):            # 孙类——子类的子类
     def money(self):            # 传家之法
         super().money()
+#       super(Son,self).money() # 可跳过父亲直接调用爷爷         
         print("一个亿")
         
 hei = Grandson()
 hei.money()                     # 一百万 /n 一千万 /n 一个亿
 
-# 2. 新式类写法
-# class A: pass    # 经典类：不由任意内置类型派生出的类
-# class Animal:            # 但python3中，这一概念被废弃，所有类都默认为新式类
-#     def walk(self):
-#         print("走路")
-# class Dog(Animal):       # 派生类，继承父类，但拥有不同于父类的属性或方法
-#     name = "小灰"
-#     def bite(self):
-#         print("嗷呜")
-# 2.2 class A():
-# 2.3 class A(object)   新式类：继承了object类或者该类的子类都是新式类，————推荐使用
-# object ————对象，python为所有对象提供的基类（顶级父类），提供了一些内置的属性和方法,可以使用dir()查看
-# print(dir(object))   # 所有类都继承object类，就算它什么都没继承，也默认继承object类
 
-# 3.多继承
+# 多继承
 # 子类可以拥有多个父类，并且具有所有父类的属性和方法
-# class Father(object):       # 父类一
-#     def money(self):
-#         print("一百万")
-# class Mother(object):       # 父类二
-#     def appearance(self):
-#         print("好看")
-# class Son(Father, Mother):  # 子类
-#     pass
-# bai = Son()
-# bai.money()         # 一百万      # 继承父类一
-# bai.appearance()    # 好看        # 继承父类二
+class Father(object):       # 父类一
+    def money(self):
+        print("一百万")
+class Mother(object):       # 父类二
+    def appearance(self):
+        print("好看")
+        
+class Son(Father, Mother):  # 子类
+    pass
+    
+bai = Son()
+bai.money()         # 一百万      # 继承父类一
+bai.appearance()    # 好看        # 继承父类二
 
-# 3.2 不同的父类存在同名的方法
-# 开发时，需要尽量避免这种情况
-# class Father(object):       # 父类一
-#     def money(self):
-#         print("一百万")
-# class Mother(object):       # 父类二
-#     def money(self):
-#         print("两百万")
-# class Son(Father,Mother):pass
-# class Son(Mother,Father):pass
-# bai = Son()
-# bai.money()  # 一百万/两百万  # 优先继承括号中位置靠前的类
-# 3.3 方法的搜索顺序
-# print(Son.__mro__)    # (<class '__main__.Son'>, <class '__main__.Mother'>, /n
-# 位置越靠前，优先级越高     <class '__main__.Father'>, <class 'object'>)
+# 如果不同的父类存在同名的方法(实际情况下，尽量避免这种情况)
+class Father(object):       # 父类一
+    def money(self):
+        print("一百万")
+class Mother(object):       # 父类二
+    def money(self):
+        print("两百万")
+        
+class Son(Father,Mother):pass
+bai = Son()
+bai.money()  # 一百万
+
+class Son(Mother,Father):pass
+bai = Son()
+bai.money()  # 两百万        # 优先继承括号中位置靠前的类(MRO顺序)
+
+# 方法的搜索顺序(__mro__)
+print(Son.__mro__)          # (<class '__main__.Son'>, <class '__main__.Mother'>, <class '__main__.Father'>, <class 'object'>) 位置越靠前，优先级越高         
 # 搜索方法时，从左往右，找到了方法就执行，如果找到最后一个类还是没有找到，就报错
-# 3.4 多继承的弊端
-# 容易引发冲突，会导致代码设计的复杂度变高
+# 多继承的弊端：容易引发冲突，会导致代码设计的复杂度变高
 
-# 4.多态
-# 指同一种行为具有不同的表现形式
-# print(10+10)   # 20         # 算术运算符：可以实现整型之间的相加操作
-# print("10"+"10") # 1010     # 字符串拼接：实现字符串之间的拼接操作
-# 4.1 多态的前提
-# 继承 、重写
-# class Animal(object):
-#     """父类：动物类"""
-#     def shout(self):
-#         print("叫")
-# class Cat(Animal):
-#     """子类一：猫类"""
-#     def shout(self):
-#         print("喵喵喵")
-# class Dog(Animal):
-#     """子类二：狗类"""
-#     def shout(self):
-#         print("汪汪汪")
-# cat = Cat()
-# cat.shout()         # 喵喵喵
-# dog = Dog()
-# dog.shout()         # 汪汪汪
-# 4.2 多态性：一种调用方式，不同的执行结果
-# class Animal(object):
-#     def eat(self):
-#         print("吃吃吃")
-# class Pig(Animal):
-#     def eat(self):
-#         print("吃猪饲料")
-# class Dog(Animal):
-#     def eat(self):
-#         print("吃狗粮")
-# 多态性：定义一个统一的接口，一个接口多种实现
-# def test(obj):      # obj
-#     obj.eat()
-# animal = Animal()
-# pig = Pig()
-# dog = Dog()
-# test(animal)        # 吃吃吃
-# test(pig)           # 吃猪饲料
-# test(dog)           # 吃狗粮
-# test函数传入不同的对象，执行不同对象的eat方法
+#-----------------------------------------------------------------------------------------------------------------
 
-# 5.静态方法
-# 使用@staticamethod来进行修饰，静态方法没有self,cls参数的限制
+# 多态：指同一种行为具有不同的表现形式。
+# 本质：“写统一的代码，调用不同对象的实现” —— 是代码可扩展性的基础。
+print(10+10)                # 20         # + 作为算术运算符：可以实现整型之间的相加操作
+print("10"+"10")            # 1010       # + 作为字符串拼接：实现字符串之间的拼接操作
+
+# 多态的前提：继承 、重写(覆盖)
+class Animal(object):       # 父类：动物类
+    def shout(self):        # 原始shout方法
+        print("叫")
+        
+class Cat(Animal):          # 子类一：猫猫类
+    def shout(self):        # 猫的shout是喵喵
+        print("喵喵喵")
+class Dog(Animal):          # 子类二：狗狗类
+    def shout(self):        # 狗的shout是汪汪
+        print("汪汪汪")
+        
+cat = Cat()
+cat.shout()         # 喵喵喵
+dog = Dog()                                    # 都是shout，但在不同类下的表现不同
+dog.shout()         # 汪汪汪 
+
+
+# 多态性：一种调用方式，不同的执行结果（定义一个统一的接口，一个接口多种实现）
+def test(obj):      
+    obj.shout()
+    
+test(cat)           # 喵喵喵
+test(dog)           # 汪汪汪
+
+# test函数传入不同的对象，执行不同对象的shout方法
+
+
+#--------------------------------------------------------------------------------------------------------------------
+
+# 小扩展
+
+
+# 静态方法
+# 使用@staticamethod来进行修饰，静态方法没有 self(实例对象) 与 cls(类) 参数的限制
 # 静态方法与类无关，可以被转换成函数使用
-# class Person(object):
-#     @staticmethod
-#     def study(name):        # 静态方法可以设置形参
-#         print(f"{name}会学习")
-# 静态方法既可以使用对象访问，也可以使用类访问
-# Person.study("人")      # 人会学习
-# man = Person()          # 调用方法时传参数
-# man.study("bai")        # bai会学习
-# 取消不必要的参数传递，有利于减少不必要的内存占用和性能消耗
+class Person(object):
+    @staticmethod
+    def study(name):                # 静态方法也可以设置形参(就和正常函数一样了，但只能由类或实例对象调用。否则会报错)
+        print(f"{name}会学习")
+# 优势是：取消了不必要的参数传递，有利于减少不必要的内存占用和性能消耗)
+Person.study("人")                  # 人会学习
+man = Person()                      # 调用方法时传参数
+man.study("bai")                    # bai会学习
 
-# 6.类方法
-# 使用装饰器@classmethod来标识为类方法，对于类方法，第一个参数必须是类对象，一般是以cls作为第一个参数
+# 类方法
+# 使用装饰器 @classmethod 来标识为类方法，对于类方法，第一个参数必须是类对象，一般是以cls作为第一个参数
 # 类方法内部可以访问类属性，或者调用其他的类方法
-# class Person(object):
-#     name = "bai"        # 内属性
-#     @classmethod
-#     def sleep(cls):     # cls代表类对象本身，类本质上是也是一个对象
-#         print("人类在睡觉")
-#         print(cls.name)
-# Person.sleep()      # 人类在睡觉
+class Person(object):
+    name = "bai"        # 内属性
+    @classmethod
+    def sleep(cls):     # cls代表类对象本身，类本质上是也是一个对象
+        print("人类在睡觉")
+        print(cls.name)
+Person.sleep()      # 人类在睡觉
 # 当方法中需要使用到类对象（如访问私有类属性等），定义类方法
+
+
+# 经典类与新式类
+class A: pass            # 经典类：不由任意内置类型派生出的类
+class Animal:            # 但Python3中，这一概念被废弃，所有类都默认为新式类，继承object
+    def walk(self):
+        print("走路")
+class Dog(Animal):       # 派生类，继承父类，但拥有不同于父类的属性或方法
+    name = "小灰"
+    def bite(self):
+        print("嗷呜")
+        
+# object，python为所有对象提供的基类（顶级父类），提供了一些内置的属性和方法,可以使用dir()查看
+print(dir(object))       # 所有类都继承object类，就算它什么都没继承，也默认继承object类
+
