@@ -129,11 +129,32 @@ print(login())                           # return不会显示返回值，需要�
 
 # 小扩展
 
-# 异常类型
-
-
-
-
+# 常见的异常类型
+"""
+NameError	        使用了未定义的变量
+TypeError	        类型不匹配（比如数字加字符串）
+ValueError        	类型对，但值不对（比如 int("abc")）
+IndexError        	索引越界（如 list[100]）
+KeyError	        字典中访问不存在的 key
+ZeroDivisionError	除数为 0
+AttributeError	    对象没有你访问的属性
+ImportError	        模块导入失败
+ModuleNotFoundError	导入的模块压根不存在（ImportError 的子类）
+FileNotFoundError	文件路径不存在
+PermissionError	    没有权限访问文件或资源
+RuntimeError	    通用运行时错误，不属于上面任何一种
+StopIteration	    迭代器没有更多数据（通常是 next() 用完）
+IndentationError	缩进错误（语法错误子类）
+SyntaxError	        写了不合法的语法（连代码都运行不了）
+MemoryError	        内存不足（极少见）
+AssertionError	    assert 断言失败时触发
+RecursionError	    递归调用次数过多导致栈溢出
+KeyboardInterrupt	用户按 Ctrl+C 触发的中断
+EOFError	        input() 没有输入时触发
+OSError	            与操作系统交互相关错误（打开文件失败等）
+"""
+# Python的异常类型是内建类的家族体系，所有异常都继承自：
+# BaseException → Exception → 各类错误
 
 # 一些罕见的异常属性(...至今没用过)
 # .__cause__	    如果是由另一个异常引发的，会记录原异常
