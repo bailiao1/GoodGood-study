@@ -136,37 +136,16 @@ print("end")
 
 #-------------------------------------------------------------------------------------------------------
 
-
 # 面向对象的三大特性：封装、继承、多态
 
-# 封装：隐藏对象中一些不希望被外部所访问到的属性或者方法
+#---------------------------------------------------------------------------------------------------------
+
+# 一、封装：隐藏对象中一些不希望被外部所访问到的属性或者方法
 class Person:
     name = "bai"
 pe = Person()
 print(pe.name)
-Person.name = "hei"            # hei , 属性可以随意修改
-
-# 隐藏属性（私有权限），值允许在类的内部使用，无法通过对象访问
-
-# 方法：在属性名或者方法名前面加上两个下划线__
-class Person:
-    name = "bai"               # 类属性
-    __age = 18                 # 隐藏属性
-    def introduce(self):       # 实例方法
-        print(f"{Person.name}的年龄是{Person.__age}")   # 在实例方法中可以访问到类属性和隐藏属性
-pe = Person()
-print(pe.age)                  # 报错，无法在类外访问
-
-# 在外部访问的方法：第一种：（不正规）
-# 隐藏属性实际上是将名字修改为了：_类名__属性名  _Person__age
-print(pe._Person__age)      # 18 成功访问到了
-
-pe._Person__age = 16        # 尝试修改
-print(pe._Person__age)      # 16 被修改并打印
-
-# 第二种：在类的内部访问(就是调用类中明确定义的方法，不翻墙)       # 正规手段
-pe.introduce()              # bai的年龄是18    # 隐藏属性被访问
-
+Person.name = "hei"            # hei , 通常类属性是可以在外部随意修改
 
 # 私有属性/方法
 # 1.xxx:普通属性/方法，如果是类中定义的，则类可以在任意地方使用
@@ -175,79 +154,107 @@ pe.introduce()              # bai的年龄是18    # 隐藏属性被访问
 # 3.__xxx:双下划线开头，隐藏属性，如果定义在类中，无法在外部直接访问，子类不会继承，
 #         要访问只能通过间接的方式，当另一个py文件中通过from xxx import *导入的时候，也无法导入（ 这种命名一般是python中的魔术方法或属性，都是有特殊含义或者功能的，不能轻易定义 ）
 
-class Man:
-    def __play(self):        # 隐藏方法
+# 私有方法(文件内调用)
+class Girl:
+    def _buy(self):
+        print("买买买")
+wo = Girl()
+wo._buy()                      # 买买买  对象可以调用，但在其他文件导入时无法使用
+
+# 隐藏属性（私有权限），值允许在 类(class) 的内部使用，无法在外部通过 对象(self) 访问，实现：在属性名或者方法名前面加上两个下划线__
+class Person:
+    name = "bai"               # 类属性
+    
+    __age = 18                 # 隐藏属性
+    def __play(self):          # 隐藏方法
         print("玩手机")
-    def funa(self):          # 平平无奇的实例方法
-        print("睡觉")
-        Man.__play(self)     # 在实例方法中调用私有方法   ——— 不够简便
-        self.__play()        # 直接在方法中让self实例调用
-      
-ma = Man()
-ma.funa()                    # 睡觉   #玩手机
-ma.__paly()                  # 报错
-ma._Man__play()              # 玩手机  # 不正规访问
+        
+    def introduce(self):       # 实例方法
+        print(f"{Person.name}的年龄是{Person.__age}")   # 在实例方法中可以访问到类属性和隐藏属性
+        
+    def funa(self):            # 再设置个平平无奇的实例方法
+        Person.__play(self)    # 在实例方法中调用私有方法 
+        self.__play()          # 或直接让 实例对象(self) 调用
+        
+pe = Person()                  
+# print(pe.age)                  # 报错，无法在类外访问
 
-# 4.5 私有方法
-# class Girl:
-#     def _buy(self):
-#         print("买买买")
-# wo = Girl()
-# wo._buy()   # 买买买 , 对象可以调用
 
-# 1.继承
-# 就是让类与类之间转变为父子关系，子类默认继承父类的属性和方法
+# 如何在外部访问：第一种：（不正规）隐藏属性实际上是将名字修改为了：_类名__属性名  _Person__age
+print(pe._Person__age)         # 18 成功访问到了
+pe._Person__play()             # 玩手机  隐藏方法同样适用
+
+pe._Person__age = 16        # 尝试修改
+print(pe._Person__age)      # 16 被修改并打印
+
+# 第二种：(正规) 在类的内部访问(就是调用之前在类中明确定义的方法，不翻墙) 
+pe.introduce()              # bai的年龄是18  隐藏属性被访问
+pe.funa()                   # 玩手机         隐藏方法同样被访问
+
+#------------------------------------------------------------------------------------------
+
+# 二、继承(不止实例化对象(self)可共享类(class)，新建类(class)同样也可以继承旧类(class))
+# 让类与类之间转变为父子关系，子类默认继承父类的属性和方法
 # 单继承
-# class Person:       # 父类
-#     def eat(self):
-#         print("我会吃饭")
-#     def sing(self):
-#         print("唱歌")
-# class Girl(Person):  # 子类
-#     def dance(self):        # 占位符，代码里面类下面不写任何东西，会自动跳过，不会报错
-#         print("跳舞")
-# girl = Girl()
-# girl.eat()   # 我会吃饭  # 继承方法
-# girl.dance()   # 跳舞
-# class Boy(Person):pass        # 子类可以不止一个
-# boy = Boy()
-# boy.sing()      # 唱歌
+class Person:               # 父类
+    def eat(self):
+        print("我会吃饭")
+    def sing(self):
+        print("唱歌")
+        
+class Girl(Person):         # 子类
+    def dance(self):
+        print("跳舞")
+        
+girl = Girl()
+girl.eat()                  # 我会吃饭  # 继承方法
+girl.dance()                # 跳舞     # 自己的方法
+
+class Boy(Person):pass      # 子类可以不止一个 / pass：占位符，代码区为空，不执行任何操作
+boy = Boy()
+boy.sing()                  # 唱歌
 # 子类可以继承父类的属性和方法，就算没有，也可以使用父类的
 
-# 1.3 继承的传递（多重继承）
-# class Father():
-#     def eat(self):
-#         print("吃饭")
-#     def sleep(self):
-#         print("睡觉")
-# class Son(Father):
-#     def eat(self):      # 方法重写并传承给子类
-#         print("大口吃饭")
-# class Grandson(Son): pass
-# bai = Grandson()
-# bai.eat()           # 大口吃饭
-# bai.sleep()         # 睡觉   # 起始于父类的父类
+# 继承的传递（多重继承）
+class Father():
+    def eat(self):
+        print("吃饭")
+    def sleep(self):
+        print("睡觉")
+        
+class Son(Father):
+    def eat(self):      # 方法重写并传承给子类
+        print("大口吃饭")
+        
+class Grandson(Son): pass
+    
+bai = Grandson()
+bai.eat()           # 大口吃饭      # 继承于父类
+bai.sleep()         # 睡觉         # 起始于父类的父类(爷爷类)
 
-# 1.3.2 对父类的方法进行扩展：继承父类的方法，子类也可以增加自己的功能
+
+# 父类的方法是可扩展的：继承父类的方法，子类也可以增加自己的功能
 # supper是一个特殊的类，super()是使用super类创造出来的对象，可以调用父类中的方法
-# class Father():
-#     def money(self):
-#         print("一百万")
-# class Son(Father):
-#     def money(self):
-#         Father.money(self)    # 第一种方法：保留父类方法
-#         super().money()         # 第二种方法，super调用父类————简写版，推荐
-#         super(Son,self).money()   # 第三种方法，supper完整写法
-#         print("一千万")
-# bai = Son()
-# bai.money()     # 一百万 /n 一千万
-# class Grandson(Son):            # 孙类——子类的子类
-#     def money(self):            # 传家之法
-#         super().money()
-#         print("一个亿")
-# hei = Grandson()
-# hei.money()   #
-# hei.money()   # 一百万 /n 一千万 /n 一个亿
+class Father():                   # 父类
+    def money(self):              # 父类方法
+        print("一百万")
+        
+class Son(Father):
+    def money(self):              # 定义子类同名方法(默认覆盖)
+        Father.money(self)        # 第一种方法：保留父类方法(手动调用)
+        super().money()           # 第二种方法，super调用父类————简写版
+        super(Son,self).money()   # 或 supper 完整写法
+        print("一千万")
+bai = Son()
+bai.money()     # 一百万 / 一千万
+
+class Grandson(Son):            # 孙类——子类的子类
+    def money(self):            # 传家之法
+        super().money()
+        print("一个亿")
+        
+hei = Grandson()
+hei.money()                     # 一百万 /n 一千万 /n 一个亿
 
 # 2. 新式类写法
 # class A: pass    # 经典类：不由任意内置类型派生出的类
