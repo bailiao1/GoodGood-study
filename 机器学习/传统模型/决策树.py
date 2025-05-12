@@ -1,6 +1,6 @@
 import numpy as np
 
-# 计算基尼指数
+# 计算基尼指数 1-（p1^2 + p2^2...）
 def gini_index(groups, classes):                                        # 定义方法
     n_samples = sum([len(group) for group in groups])                   # 计算样本总数
     gini = 0.0                                                          # 初始化基尼指数
