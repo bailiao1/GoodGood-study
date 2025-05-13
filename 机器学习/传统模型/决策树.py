@@ -15,9 +15,6 @@ def gini_index(groups, classes):                                        # 定义
         gini += (1 - score) * (size / n_samples)                                  # 计算该 group 对整体基尼指数的贡献，并累加
     return gini                                                                   # 返回最终基尼指数
 
-# 示例数据
-dataset = [[1, 'A'], [2, 'A'], [3, 'B'], [4, 'B']]
-
 # 寻找最佳分裂点
 def best_split(dataset):
     best_feature, best_value, best_score, best_groups = None, None, float('inf'), None      # best_score设置为无限大
