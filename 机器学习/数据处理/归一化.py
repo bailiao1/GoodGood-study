@@ -30,7 +30,7 @@ def zs(x):
   for i in range(n):
     me = np.mean(x[:,i])
     st = np.std(x[:,i])
-    if st == 0;
+    if st == 0:
       x[:,i] = 0
     else:
       x[:,i] = (x[:,i] - me)/st
