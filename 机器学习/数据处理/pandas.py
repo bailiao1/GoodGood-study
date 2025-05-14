@@ -7,15 +7,17 @@ data = {
 }                                                              #    2  Charlie   35      Chicago
 df = pd.DataFrame(data)             # 创建 DataFrame
 print(df)
+
 df = pd.read_csv("data.csv")        # 读取 CSV 文件，返回 DataFrame（表格）
 print(df.head())                    # 显示前5行
 
 print(df.info())                    # 查看数据类型,缺失值
-print(df.describe())                # 查看数据的基本统计信息（均值,方差,最大值,最小值）
+print(df.isnull().sum())            # 查看缺少值
+print(df.describe())                # 查看数据的基本统计信息（均值,方差,最大值,最小值,百分位数）
 
 print(df["Age"].mean())             # 计算 "Age" 列的平均值
 print(df.shape)                     # 输出 (行数, 列数)
-print(df.columns)                   # 查看所有列名
+print(df.columns)                   # 查看所有列(特征)名
 
 print(df["Name"])                   # 选取某一列
 print(df.iloc[0])                   # 选取第一行
@@ -30,7 +32,7 @@ print(df["销售额"].mean())           # 计算均值
 print(df["销售额"].median())         # 计算中位数
 print(df["销售额"].var())            # 计算方差
 print(df["销售额"].std())            # 计算标准差
-print(df.corr())                    # 计算所有列之间的相关性
+print(df.corr())                     # 计算所有列之间的相关性(只计算数值型列之间的相关性,非数字列会被自动忽略)
 
 # 可视化数据
 # import matplotlib.pyplot as plt
@@ -103,5 +105,5 @@ print(df.info())                                                 # 再次查看�
 
 df.drop(columns=["PassengerId", "Name", "Ticket", "Cabin"], inplace=True)         # 删除对结果预测无用的特征,如票号,姓名
 df[["Embarked_C", "Embarked_Q", "Embarked_S"]] = df[["Embarked_C", "Embarked_Q", "Embarked_S"]].astype(int)   # 转int
-X = df.drop(columns=["Survived"])  # 训练特征
-y = df["Survived"]  # 预测目标
+X = df.drop(columns=["Survived"])                                                 # 训练特征
+y = df["Survived"]                                                                # 预测目标
