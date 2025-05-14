@@ -5,14 +5,15 @@ data = {
     "Age": [25, 30, 35],                                       #    0    Alice   25     New York
     "City": ["New York", "Los Angeles", "Chicago"]             #    1      Bob   30  Los Angeles
 }                                                              #    2  Charlie   35      Chicago
-df = pd.DataFrame(data)             # 创建 DataFrame
-print(df)
 
-df = pd.read_csv("data.csv")        # 读取 CSV 文件，返回 DataFrame（表格）
+df = pd.read_csv(r"xx/xx/xx.csv")   # 读取某csv文件，返回 DataFrame
+df = pd.DataFrame(data)             # 或手动创建 DataFrame
+
+print(df)                           # 打印表格
 print(df.head())                    # 显示前5行
 
 print(df.info())                    # 查看数据类型,缺失值
-print(df.isnull().sum())            # 查看缺少值
+print(df.isnull().sum())            # 查看缺少值总数
 print(df.describe())                # 查看数据的基本统计信息（均值,方差,最大值,最小值,百分位数）
 
 print(df["Age"].mean())             # 计算 "Age" 列的平均值
@@ -28,11 +29,16 @@ df.fillna("Unknown")                # 填充缺失值
 df.fillna(df.mean(), inplace=True)  # 用均值填充缺失值
 df.drop_duplicates()                # 删除重复值
 
-print(df["销售额"].mean())           # 计算均值
-print(df["销售额"].median())         # 计算中位数
-print(df["销售额"].var())            # 计算方差
-print(df["销售额"].std())            # 计算标准差
-print(df.corr())                     # 计算所有列之间的相关性(只计算数值型列之间的相关性,非数字列会被自动忽略)
+print(df["Age"].mean())             # 计算均值
+print(df["Age"].mode())             # 计算众数(有时候可能会有多个众数，它们出现的次数相同)
+print(df["Age"].median())           # 计算中位数
+print(df["Age"].var())              # 计算方差
+print(df["Age"].std())              # 计算标准差
+print(df.corr())                    # 计算所有列之间的相关性(只计算数值型列之间的相关性,非数字列会被自动忽略)
+
+
+#---------------------------------------------------------------------------------------------------------------
+
 
 # 可视化数据
 # import matplotlib.pyplot as plt
