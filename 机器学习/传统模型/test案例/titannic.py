@@ -43,6 +43,7 @@ print(f"XGBoost 准确率: {accuracy_xgb:.4f}")                                 
 
 # 整活小案例，逻辑回归
 def zs(x):                                      # Z-score 归一化
+  x = x.astype("f8")                            # 格式改一下，不然自能生成整数，小数直接被截断
   n = x.shape[-1]
   for i in range(n):
     me = np.mean(x[:,i])
