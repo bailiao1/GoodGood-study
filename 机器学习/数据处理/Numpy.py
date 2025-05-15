@@ -201,10 +201,16 @@ print(f"大于 0.5 的元素个数: {count_gt_05}")                        # 大
 # size属性,直接调出数组对象中的元素总量
 print(f"大于 0.5 的元素占比:{(count_gt_05 / arr.size):.1f}%")       # 大于 0.5 的元素占比:0.5%
 
+
 # np.where(condition,x,y)：对于数组中每一个元素，如果满足 condition，就返回 x 对应位置的值；否则返回 y 对应位置的值。 用于条件筛选后定位索引或替换。
 A = np.array([1, 2, 3, 4])
 idx = np.where(A > 2)                    # 返回满足条件的索引 → (array([2, 3]),) 是索引，不是实数
 new_A = np.where(A > 2, 100, A)          # 满足条件替换成100，否则保留原值,x 和 y 必须成对出现，否则无法进行
+
+# np.clip(array,min,max): 限制数组中数字的范围，大于max的变成max，小于min的变成min 
+arr = np.array([0.2, -3, 0.9, 1.5, 10])
+res = np.clip(arr, 0, 1)
+print(res)                               # [0.2 0.  0.9 1.  1. ]
 
 # np.unique()：返回数组中唯一值，可选返回计数
 arr = np.array([1,2,2,3,3,3])
