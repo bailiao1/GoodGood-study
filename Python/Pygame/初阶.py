@@ -54,13 +54,6 @@ if keys[pygame.K_LEFT]:
 
 
 
-
-
-
-
-
-
-
 # 创建游戏时钟
 clock = pygame.time.Clock()
 clock.tick(n)                                                          # 控制每秒生成的帧数
