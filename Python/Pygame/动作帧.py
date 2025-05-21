@@ -41,7 +41,36 @@ while running:
     if frame_time >= frame_duration:             # 每次加一帧时长，直到播放时长超过限制，换下一张图(动作帧)
       frame_index += 1                           # 索引改变
       frame_time = 0                             # 重新计当前图片的播放时长
+      if frame_index >= len(frames):             # 判断帧图是否播放完成
+        playing = False                          # 停止播放
+        frame_index = 0                          # 回归第一帧
 
+  screen.fill((30,30,30)                         # 场景初始化
+  if playing:
+    screen.blit(frames[frame_index],(350,250))   # 如果处于播放状态，这一帧就播放图片
+  else:
+    screen.blit(frames[0],(350,250))             # 否则就渲染初始状态
 
-
+  pygame.display.flip()                          # 显示
   
+pygame.quit()                                    # 关闭，释放内存
+
+# -------------------------------------------------------------------------------------------------------------------
+
+
+# 帧绑定碰撞箱
+
+def make_frame(color):                           # 创建图片的流程封装成函数
+  surf = pygame.Surface((100,100))
+  surf.fill(color)
+  return surf
+
+frames = [
+      {"imags":make_frame((200,0,0)),"hitboxes":[]},                            
+      {"imags":make_frame((0,200,0)),"hitboxes":[pygame.rect(60,30,30,20)]},      # # 同样适用三个动画帧，但只有第二帧才有碰撞箱
+      {"imags":make_frame((0,0,200)),"hitboxes":[]}
+]
+
+
+
+
