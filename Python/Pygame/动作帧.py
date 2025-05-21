@@ -58,7 +58,7 @@ pygame.quit()                                    # 关闭，释放内存
 # -------------------------------------------------------------------------------------------------------------------
 
 
-# 帧绑定碰撞箱
+# 简单的带碰撞箱的动画帧
 
 def make_frame(color):                           # 创建图片的流程封装成函数
   surf = pygame.Surface((100,100))
@@ -66,11 +66,58 @@ def make_frame(color):                           # 创建图片的流程封装�
   return surf
 
 frames = [
-      {"imags":make_frame((200,0,0)),"hitboxes":[]},                            
-      {"imags":make_frame((0,200,0)),"hitboxes":[pygame.rect(60,30,30,20)]},      # # 同样适用三个动画帧，但只有第二帧才有碰撞箱
-      {"imags":make_frame((0,0,200)),"hitboxes":[]}
-]
+      {"imags":make_frame((200,0,0)),"hitboxes":[]},                              # 第一帧,无碰撞
+      {"imags":make_frame((0,200,0)),"hitboxes":[pygame.Rect(60,30,30,20)]},      # 第二帧,有碰撞，这里的箱子参数是(x,y,w,h) x,y是相对角色坐标，wh 则是 宽和高
+      {"imags":make_frame((0,0,200)),"hitboxes":[]}                               # 第三帧,无碰撞  
+      ]                                                                                          
+# 小知识: 在图形中，y值变大是向下移动，且 场景screen 显示的是第四象限，即最左为0，最高为0，但负值也不会报错，只会跑出窗口
+
+# 同样设置控制变量
+frame_index = 0
+frame_duration = 200
+frame_time = 0
+playing = False
+
+# 创建坐标对象
+player_pos = pygame.Vector2(300,300)
+
+running = True                                          # 按流程创建主循环
+while running:
+  dt = clock.tick(60)
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:running = False
+    elif event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_f:
+        playing = True
+        frame_index = 0
+        frame_time = 0
+        
+  if playing:
+    frame_time += dt
+    if frame_time >= dt:
+      frame_index += 1
+      frame_time = 0
+      if frame_index >= len(frames):
+        playing = False
+        frea_index = 0
 
 
+  current_frame = frames[frame_index]                  # 创建变量获取当前帧的 图片 和 碰撞箱
+  screen.fill((30,30,30))                              # 填充，刷新画面
+  screen.blit(current_frame["imags"],player_pos)       # 在对应的角色坐标(player_pos) 画出当前的 动画图片，如果没做偏差，图像是现实在目标坐标的右下，图像的(0,0) 和 pos 重叠，而不是中心对齐
+  
+  for box in current_frame["hitboxes"]:                # 使用for循环创建当前动画的碰撞箱，且画到场景中(大多时候，箱子不止一个，这里的hit只是攻击判定箱子)
+    world_box = pygame.Rect(
+      play_pos.x + box.x,                              # 绑定坐标，使箱子随着角色移动
+      play_pos.y + box.y,
+      box.width,
+      box.height
+    )
+  pygame.draw.rect(screen,(0,255,0),world,world_box,2) # 画箱子，线宽2：显示线框
+
+  pygame.dispaly.flip()                                
+
+pygame.quit()
+  
 
 
