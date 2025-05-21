@@ -99,7 +99,7 @@ while running:
       frame_time = 0
       if frame_index >= len(frames):
         playing = False
-        frea_index = 0
+        frame_index = 0
 
 
   current_frame = frames[frame_index]                  # 创建变量获取当前帧的 图片 和 碰撞箱
@@ -108,14 +108,14 @@ while running:
   
   for box in current_frame["hitboxes"]:                # 使用for循环创建当前动画的碰撞箱，且画到场景中(大多时候，箱子不止一个，这里的hit只是攻击判定箱子)
     world_box = pygame.Rect(
-      play_pos.x + box.x,                              # 绑定坐标，使箱子随着角色移动
-      play_pos.y + box.y,
+      player_pos.x + box.x,                              # 绑定坐标，使箱子随着角色移动
+      player_pos.y + box.y,
       box.width,
       box.height
     )
-  pygame.draw.rect(screen,(0,255,0),world,world_box,2) # 画箱子，线宽2：显示线框
+    pygame.draw.rect(screen,(0,255,0),world,world_box,2) # 画箱子，线宽2：显示线框
 
-  pygame.dispaly.flip()                                
+  pygame.display.flip()                                
 
 pygame.quit()
   
