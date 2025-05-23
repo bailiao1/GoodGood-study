@@ -9,7 +9,7 @@ clock.tick(n)                                                          # 控制�
 clock.get_fps()	                                                       # 获取实际运行时的帧率（float）监视帧率
 
 # 场景初始化
-screen = pygame.display.set_mode((m,n))                                # 设置场景(窗口)大小，screen是自定义的窗口对象
+screen = pygame.display.set_mode((m,n))                                # 设置场景(窗口)大小，screen是自定义的窗口对象，pygame.FULLSCREEN 则可以自适应全屏
 screen.fill(color)                                                     # 清空画面并填充背景颜色，通常放在while内第一行执行
 
 # 处理事件（监听键鼠点按）
