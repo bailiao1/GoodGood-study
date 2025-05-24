@@ -113,7 +113,7 @@ while running:
       box.width,
       box.height
     )
-    pygame.draw.rect(screen,(0,255,0),world,world_box,2) # 画箱子，线宽2：显示线框
+    pygame.draw.rect(screen,(0,255,0),world_box,2) # 画箱子，线宽2：显示线框
 
   pygame.display.flip()                                
 
