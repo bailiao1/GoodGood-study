@@ -18,7 +18,7 @@ for event in pygame.event.get():
         running = False                                                # running为False，关闭运行
     elif event.type == pygame.KEYDOWN:                                 # 键盘类
         if event.key == pygame.K_SPACE:                                # 如果按到空格(pygame.K_SPACE)
-            jump()                                                     # 执行跳函数
+            jump()                                                     # 执行函数
 
 # 处理持续状态（长按）
 keys = pygame.key.get_pressed()
@@ -31,7 +31,7 @@ pygame.quit()                                                          # 结束�
 
 # 文字显示
 font = pygame.font.SysFont(name, size, bold=False, italic=False)       # 设置字体(字体名称（默认为None），大小，是否加粗，是否斜体）
-text_surface = font.render("你好，世界", True, (255, 255, 255))          #  文字 （要显示的文字，是否抗锯齿，文字颜色）
+text_surface = font.render("你好，世界", True, (255, 255, 255))         #  文字 （要显示的文字，是否抗锯齿，文字颜色）
 screen.blit(text_surface, (100, 100))                                  # 渲染，把文字画上去（文字，坐标）
 
 
@@ -45,8 +45,7 @@ pygame.draw.ellipse()	                                               # 画椭圆
 # 碰撞激活
 if xxx.colliderect(xx):                                                # 如果xxx碰到了xx，执行下面代码
 
-
-
+    
 # 坐标
 pos = pygame.Vector(2,1)                                               # 在(2,1)坐标创建一个点对象            # 代替了x，y分别建立，整合player_x,player_y
 pos += pygame.Vector(2,0)                                              # 移动点对象，向右两格                 # 但还是可以使用 pos.x 和 pos.y 获取x,y的具体值            
@@ -58,7 +57,7 @@ distance = (p1 - p2).length()                                          # 前提 
                                          
 
 # 贴图
-screen.blit(image, rect)     
+screen.blit(image, rect)                                                
 
 
 
