@@ -129,7 +129,7 @@ class DQN(nn.Module):                                                           
     def forward(self, x):                                                                   # 前向传播
         return self.net(x)
 
-class DQNAgent:
+class DQNAgent:                                                                            # 构建智能体
     def __init__(self, input_dim=9, output_dim=3, gamma=0.9, epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01,
                  lr=1e-3, batch_size=64, buffer_size=10000, device="gpu"):
         self.device = device
