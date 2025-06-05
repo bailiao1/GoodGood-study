@@ -190,13 +190,13 @@ class DQNAgent:                                                                 
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
-    def save(self, path):
+    def save(self, path):                                                       # 保存当前模型的主网络权重
         torch.save(self.model.state_dict(), path)
 
     def load(self, path):
-        self.model.load_state_dict(torch.load(path, map_location=self.device))
-        self.update_target()
-
+        self.model.load_state_dict(torch.load(path, map_location=self.device))  # 加载网络权重
+        self.update_target()                                                    # 同步目标网络
+        
 env = SnakeEnv()
 agent = DQNAgent(input_dim=9, output_dim=3)
 
