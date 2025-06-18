@@ -1,0 +1,54 @@
+extends Node
+
+var a :String= "1"                                  # :声明变量类型
+var b :int = 1
+var c :float = 2.6
+var d :bool = true
+
+func _enter_tree():
+	self.a = String.num_int64(b)                      # 强行将 int64 转 str
+  self.a = str(b)                                   # 同样是转str
+	a = "hello world"
+	print(a)
+
+  b = c                                             # float转int，直接去掉小数位：2
+  print(b)
+
+  d = b                                             # int转bool,除0以外都是true
+  print(d)                                          # true
+  d = !d                                            # 布尔值取反
+  print(d)                                          # false
+
+# 值复制
+# -------- 值类型 ----------
+var x :int  = 1
+var y = x        # 复制
+x += 1           # y 仍然是 1
+
+var s1 :String = "hi"
+var s2 = s1  # 共用数据
+s1 += "!"            # 写时拷贝 ➜ s2 还是 "hi"
+
+# -------- 容器类型 ----------
+var arr1 = [1, 2]
+var arr2 = arr1       # 同一份
+arr1.append(3)
+print(arr2)           # ➜ [1, 2, 3]
+
+# 想独立修改：
+var arr3 = arr1.duplicate()
+arr3.append(99)       # arr1 不受影响
+
+# -------- 对象 / 资源 ----------
+var node1 = Node2D.new()
+var node2 = node1     # 同一实例
+node2.position.x = 100
+print(node1.position) # ➜ (100, 0)
+
+
+ 
+# 二维变量 
+var v = Vector2(1,1)                                # 包括了两个值 (float x,float y)
+func _enter_tree():
+  v.x = 16                                          
+  print(v)                                          # (16,1)
