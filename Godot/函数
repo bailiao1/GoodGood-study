@@ -1,0 +1,19 @@
+func 函数名(形参) -> 可定义输出类型：
+  函数内容
+  return 返回值
+
+
+
+
+
+# 比较两个浮点数是否“近似相等”
+var a = 0.1 + 0.2
+var b = 0.3
+print(is_equal_approx(a, b))          # true
+
+# 扩展
+is_equal_approx(a, b)	                # 通用近似等于（容差 ≈ 1e-5）
+is_zero_approx(x)	                    # 判断 x 是否约等于 0
+lerp(a, b, t)	                        # 线性插值
+move_toward(a, b, delta)	            # 每帧靠近 b，避免 overshoot
+deg_to_rad(), rad_to_deg()	          # 转换角度单位
