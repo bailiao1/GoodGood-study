@@ -17,3 +17,11 @@ is_zero_approx(x)	                    # 判断 x 是否约等于 0
 lerp(a, b, t)	                        # 线性插值
 move_toward(a, b, delta)	            # 每帧靠近 b，避免 overshoot
 deg_to_rad(), rad_to_deg()	          # 转换角度单位
+
+
+# 信号绑定函数
+self.connect("信号名",Callable(self,"函数名"))
+emiy_signal("信号名",发射的参数)       # 发射信号
+
+
+# await 信号名                        # 暂停函数，直到接收到某信号再执行
