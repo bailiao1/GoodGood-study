@@ -23,8 +23,8 @@ print("感知机输出:", result)
 
 
 # 单层神经元
-def relu(x):                                                # 激活函数：ReLU 太 tm 重要啦
-    return np.maximum(0, x)                                 # 什么？你的趋势应该是继续上升？不行，你必须是0（去死~）
+def relu(x):                                                # 激活函数
+    return np.maximum(0, x)                                 
 
 class Neuron:                                               # 定义一个简单的神经元
     def __init__(self, input_size):
@@ -243,3 +243,4 @@ print("训练完成！测试 XOR 结果：")
 for i in range(len(X)):
     pred = mlp.forward(X[i].reshape(1, -1))
     print(f"输入: {X[i]}, 预测输出: {pred[0][0]:.5f}")
+
