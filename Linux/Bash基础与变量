@@ -43,4 +43,17 @@ echo $USER                  # 当前用户名
 echo $SHELL                 # 当前shell（命令解释器）
 echo $PWD                   # 当前目录（由shell维护，可以export修改，可能被篡改(环境变量本质还是一组键值对，非pwd命令直接向系统询问)）
 
+# 局部变量(只存在于当前shell，子进程看不到)
+name="Bai"                  # 定义变量（等号两边不能有空格）
+echo "hello $name"          # hello Bai
 
+# 命令替换
+current_data=$(data)        # 先执行data，再把输出结果作为字符串替换进变量（current_data）
+
+unset name                  # 彻底删除变量
+export name=xxx             # 变成环境变量
+
+# 特殊变量
+echo $?                     # 上一个命令的推出状态（0=成功）
+echo $$                     # 当前shell的进程PID
+echo $!                     # 最后一个后台进程的PID
