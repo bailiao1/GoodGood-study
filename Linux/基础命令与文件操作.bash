@@ -1,8 +1,28 @@
-# 创建和删除
-mkdir new_floder           # 创建空目录(win的文件夹)
-mkdir -p new_floder/child  # 创建多级目录
+# 查看当前目录
+pwd
 
+# 列出文件和目录
+ls          # 简单列出
+ls -l       # 详细列出（权限、大小、时间）
+ls -la      # 包括隐藏文件（以.开头的文件）
+ls -lh      # 人类可读的大小（KB, MB）
+ls /home    # 列出指定目录
+
+# 切换目录
+cd /home/user      # "/" 绝对路径
+cd Documents       # 相对路径
+cd ..              # 上一级目录
+cd ~               # 家目录
+cd -               # 回到上一个目录
+
+# 可组合
+cd ../../etc       # 从user开始，返回两次上级，user -> home -> /(根目录) 再打开根目录下的etc目录
+
+# 创建和删除
+mkdir new_floder           # 创建空目录
+mkdir -p new_floder/child  # 创建多级目录
 touch file.txt             # 创建空文件
+
 rm file.txt                # 删除指定文件（不包括目录）
 
 rm -r new_floder           # 递归删除目录及内部的文件，子目录
