@@ -38,6 +38,16 @@ cat file.txt           # 显示整个文件
 less file.txt          # 分页查看（可向前也能向后 1 <-> 2）
 more file.txt          # 分页查看（只能前向查看 1 -> 2）
 
+# less 里常用的几个常用键
+q     #退出
+Space #下一页
+b     # 上一页
+↑ ↓   # 上下滚动
+/     # 搜索
+n / N # 下一个 / 上一个匹配
+g     # 文件开头
+G     # 文件结尾
+
 hand -n 10 file.txt    # 查看开头10行
 tail -n 10 file.txt    # 查看尾部10行
 
@@ -72,6 +82,3 @@ wc -l                  # 统计行数
 wc -w                  # 统计单词数
 wc -c                  # 统计字节数
 wc -m                  # 统计字符数
-
-
-                  
