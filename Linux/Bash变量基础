@@ -40,5 +40,7 @@ printenv                    # 同上
 echo $HOME                  # 家目录
 echo $PATH                  # 命令搜索路径
 echo $USER                  # 当前用户名
-echo $SHELL                 # 当前shell
+echo $SHELL                 # 当前shell（命令解释器）
+echo $PWD                   # 当前目录（由shell维护，可以export修改，可能被篡改(环境变量本质还是一组键值对，非pwd命令直接向系统询问)）
+
 
