@@ -20,7 +20,9 @@ kill -9 1234           # 强制杀死进程
 ps -p 1                # 查看PID=1的进程，PID1通常是systemd或其他init系统，是所有用户进程的祖先进程。如果PID1出问题，系统基本完蛋
 ps -o pid,ppid,cmd     # 查看当前进程是谁（PID），它爹是谁（PPID），它启动了什么命令（CMD）。每输入一串指令都是一段进程，bash存在也是一段进程
 ps aux                 # 查看所有进程
-ps aux | grep nginx    # 查看特定进程
+
+ps aux | grep nginx    # 查看特定进程（会包含grep自己，不推荐）
+ps -C nginx -f         # 使用 ps -C name（推荐）-f 查看完整信息
 
 type cd                # 可查看指令是否为shell内建（builtin 不会 fork 新进程，必须在 bash 里执行）
 
