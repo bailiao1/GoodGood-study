@@ -3,7 +3,7 @@ whoami                 # 内核眼里，我现在是谁？（用户名/root）
 id                     # uid（用户身份），gid（主组），groups（能用哪些附加权限）
 uname -a               # 操作系统的内核是什么？（内核类型,主机名,内核版本,编译信息,架构，用户环境）
                        # 常见的几种内核抢占模型：PREEMPT_NONE（高延迟高吞吐），PREEMPT_VOLUNTARY（中延迟中吞吐），PREEMPT（低延迟低吞吐），PREEMPT_DYNAMIC（可切换）    
-                       
+
 lsb_release -a         # 用的发行版是哪家? (发行方,人类可读名称,发行版本,代号) 。当某些最小系统/容器里 没有 lsb_release 时可以用：cat /etc/os-release
 
 # 系统状态
