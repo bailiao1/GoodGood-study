@@ -32,7 +32,8 @@ curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源�
 wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
 
 # 查看当前目录
-pwd                    
+pwd         # 默认可能保留逻辑路径        
+pwd -P      # 显示物理路径
 
 # 列出文件和目录
 ls          # 简单列出
