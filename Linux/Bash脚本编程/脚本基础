@@ -1,0 +1,33 @@
+# 创建脚本
+touch script.sh
+
+# 写入shebang(不是必须但推荐)
+echo '#!/bin/bash' > script.sh      # 这不是注释，脚本内告诉系统用哪个解释器执行
+
+# 追加脚本内容（单引号'' 强引用，里面的所有字符都保持原样，没有任何特殊含义）
+echo 'echo "hello linux"'
+
+# chmod（修改文件权限的命令）
+chmod +x script.sh                  # 给脚本script.sh 添加可执行的权限（+（增加）x（执行execute））
+
+# 执行
+./script.sh
+
+
+# 多行写入 ('EOF'加上单引号，保证内容原封不动地写入文件)
+cat > script.sh <<'EOF'
+#!/bin/bash
+echo "hello linux"
+EOF
+
+
+# 条件判断
+# -lt(小于) , -le(小于等于) , -eq(等于) , -ne(不等于) , -gt(大于) , -ge(大于等于)
+
+if [ $1 -gt 10]; then        # $1代表执行脚本时传入的第一个位置参数。之后会对[]里面的表达式求值，并返回（0为真 / 1为假），决定是否执行 then 部分。
+    echo "大于10"
+elif [ $1 -eq 10]; then
+    echo "等于10"
+else
+    echo "小于10"
+fi                           # if判断结束
