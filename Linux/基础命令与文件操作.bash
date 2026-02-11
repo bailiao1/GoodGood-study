@@ -1,5 +1,38 @@
+# 系统信息命令
+whoami                 # 内核眼里，我现在是谁？（用户名/root）
+id                     # uid（用户身份），gid（主组），groups（能用哪些附加权限）
+uname -a               # 操作系统的内核是什么？（内核类型,主机名,内核版本,编译信息,架构，用户环境）
+                       # 常见的几种内核抢占模型：PREEMPT_NONE（高延迟高吞吐），PREEMPT_VOLUNTARY（中延迟中吞吐），PREEMPT（低延迟低吞吐），PREEMPT_DYNAMIC（可切换）    
+                       
+lsb_release -a         # 用的发行版是哪家? (发行方,人类可读名称,发行版本,代号) 。当某些最小系统/容器里 没有 lsb_release 时可以用：cat /etc/os-release
+
+# 系统状态
+df -h                  # 查看磁盘使用情况（人类可读）
+du -sh folder/         # 查看目录大小
+free -h                # 查看内存使用情况
+
+top                    # 实时查看进程（类似任务管理器）
+htop                   # top增强版（需要先安装）
+
+kill 1234              # 给 PID=1234 的进程发信号，通常能关闭，但不是马上
+kill -9 1234           # 强制杀死进程
+
+ps -p 1                # 查看PID=1的进程，PID1通常是systemd或其他init系统，是所有用户进程的祖先进程。如果PID1出问题，系统基本完蛋
+ps -o pid,ppid,cmd     # 查看当前进程是谁（PID），它爹是谁（PPID），它启动了什么命令（CMD）。每输入一串指令都是一段进程，bash存在也是一段进程
+ps aux                 # 查看所有进程
+ps aux | grep nginx    # 查看特定进程
+
+type cd                # 可查看指令是否为shell内建（builtin 不会 fork 新进程，必须在 bash 里执行）
+
+# 网络
+ip addr                # 或简写 ip a 查看所有接口IP地址
+
+ping google.com                    # ping使用 ICMP协议 测试网络连通性，DNS，延迟等。无法测试目标服务是否可用，不能代表真实速度
+curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
+wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
+
 # 查看当前目录
-pwd
+pwd                    
 
 # 列出文件和目录
 ls          # 简单列出
@@ -32,13 +65,20 @@ rmdir new_floder           # 只删除空目录（非空会报错）
 rm new_floder/*      # 删除所有文件（不包括子目录）
 rm -r new_floder/*   # 删除所有文件和子目录
 
+# 复制与移动
+cp file.txt file_backuo.txt     # 复制file并在当前目录创建一个file_backuo（如果已有，即覆盖）
+cp file.txt floder1/            # 复制到floder1下
+cp -r folder1 folder2           # 递归复制目录
+
+mv file.txt floder1/            # 移动file到floder1下（可直接移动目录）
+mv old_name.txt new_name.txt    # 重命名
 
 # 查看文件
 cat file.txt           # 显示整个文件
 less file.txt          # 分页查看（可向前也能向后 1 <-> 2）
 more file.txt          # 分页查看（只能前向查看 1 -> 2）
 
-# less 里常用的几个常用键
+# less中常用的几个键
 q     #退出
 Space #下一页
 b     # 上一页
