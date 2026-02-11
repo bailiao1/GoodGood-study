@@ -1,2 +1,28 @@
 # 管道，将前一个命令的输出作为后一个命令的输入
 ls -la | grep ".txt"        # 只显示txt文件的长格式
+ps aux | grep python        # 查找python进程
+cat file.txt | sort | uniq  # 排序并去重
+history | grep "git"        # 查找历史中的git命令
+
+# 输出重定向
+ls &> file.txt              # 将所有输出(标准输出（stdout）和 标误输出（stderr）)重定向写入file(覆盖)
+ls > file.txt               # 将ls的标准输出（stdout）写入
+ls >> file.txt              # 追加写入
+command 2> error.los        # 把错误信息（stderr）单独重定向到文件,command指代任何指令（但确实存在一个同名的内建指令）
+                            # command -v ls 用来执行命令或检查命令类型
+
+# 输入重定向
+sort < file.txt             # 从文件中读取输入
+cat << EOF                  # 多行输入，把后面的多行文本作为标准输入传给 cat
+> Line1
+> Line2
+> EOF                       # 直到再遇到 EOF 为止
+
+# 通配符
+ls *.txt                    # 所有结尾为txt的文件
+ls file?.txt                # file(n) 等等.txt
+ls file[0-9]                # file0 - file9 的.txt
+ls file{A,B,C}.txt          # fileA.txt,fileB.txt,fileC.txt
+ls **/*.py                  # 所有子目录(包括本层)中的py文件(*代表本层，**代表自身以及继续往下的整颗目录树，需要先使用 shopt -s globstar )
+
+
