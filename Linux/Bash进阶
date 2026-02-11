@@ -4,6 +4,9 @@ ps aux | grep python        # 查找python进程
 cat file.txt | sort | uniq  # 排序并去重
 history | grep "git"        # 查找历史中的git命令
 
+# 三个标准文件描述符
+# (0:stdin,1:stdout,2:stderr)
+
 # 输出重定向
 ls &> file.txt              # 将所有输出(标准输出（stdout）和 标误输出（stderr）)重定向写入file(覆盖)
 ls > file.txt               # 将ls的标准输出（stdout）写入
@@ -25,4 +28,17 @@ ls file[0-9]                # file0 - file9 的.txt
 ls file{A,B,C}.txt          # fileA.txt,fileB.txt,fileC.txt
 ls **/*.py                  # 所有子目录(包括本层)中的py文件(*代表本层，**代表自身以及继续往下的整颗目录树，需要先使用 shopt -s globstar )
 
+# 写
+echo                        # 把字符串写到标准输出
+printf                      # 而当前进程的stdout默认连接到终端，输出会出现在屏幕上
+
+# 环境变量（ 由shell维护，传递给子进程的一组键值对。用于配置程序行为，指定路径，传递运行参数，保存用户/系统信息 ）
+env                         # 查看所有环境变量
+printenv                    # 同上
+
+# 常用的环境变量
+echo $HOME                  # 家目录
+echo $PATH                  # 命令搜索路径
+echo $USER                  # 当前用户名
+echo $SHELL                 # 当前shell
 
