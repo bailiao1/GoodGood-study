@@ -1,0 +1,34 @@
+# systemd 是linux的初始化系统（init system）和服务器管理器，是启动后的第一个用户空间程序（PID 1）
+# 负责系统服务（网络，ssh，nginx等）
+# 负责后台守护进程（daemon）
+# 监控服务状态
+# 处理开机启动项
+# 管理日志（journal）
+# 控制系统电源状态（开机/关机）
+
+# 启动大致顺序：
+# BIOS -> Bootloader(grub) -> Kernel -> systemd(PID 1) -> 各种系统 -> 用户登录
+
+# Unit：systemd管理的对象
+# 常见类型：service(服务) , socket(套接字) , target(运行级别) , mount(挂载) , time(定时任务)
+
+# sudo :暂时借取 root 权限
+# systemctl :管理 systemd 的命令
+
+systemctl status nginx             # 查看nginx进程的状态
+
+sudo systemctl start nginx         # 启动服务
+sudo systemctl stop nginx          # 停止服务
+sudo sysemctl restart nginx        # 重启
+
+sudo systemctl enable eginx        # 设置为开机自启动
+sudo systemctl disabel --now nginx # 停止服务+取消开机自启动（--now 表示立即执行stop，可以不加）
+# enable 的本质是：在 /etc/systemd/system/ 下创建一个符号链接，把 nginx.service 挂到某个 target（通常是 multi-user.target）
+# disabel 就是将某unit从里面取消挂载
+
+sudo systemctl mask nginx          # 如果需要彻底禁止还能被某依赖拉起
+sudo systemctl unmask nginx        # 恢复
+
+systemctl is-enabled               # 查看是否开机自启，可能返回（enabled（是），disabled（否），static（只能被其他unit依赖拉起，不能自启动），maked（完全禁止启动））
+
+           
