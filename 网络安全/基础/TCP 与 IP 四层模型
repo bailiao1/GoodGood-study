@@ -51,6 +51,5 @@ TCP/IP     OSI对应层
 # 建立连接常见状态 (LISTEN 、SYN_SENT 、SYN_RECEIVED 、ESTABLISHED)
 # 断开常见状态 (FIN_WAIT_1 、FIN_WAIT_2 、CLOSE_WAIT 、LAST_ACK 、TIME_WAUT)
 
-
 # UDP (无连接，不可靠，面向报文，延迟比可靠更重要)
 头部结构(8字节)：源端口，目的端口，长度，效验和
