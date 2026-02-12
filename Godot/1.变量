@@ -7,8 +7,7 @@ var c :float = 2.6
 var d :bool = true
 
 func _enter_tree():
-	self.a = String.num_int64(b)                      # 强行将 int64 转 str
-  self.a = str(b)                                   # 同样是转str
+  self.a = str(b)                                   # 转str
 	a = "hello world"
 	print(a)
 
@@ -28,6 +27,7 @@ var b:Array[int] = [1,2,3,4,5]
 b.append(6)					    # 添加元素
 b.eraase(4)					    # 删除指定元素(优先删除靠前的数据)
 b.size 						    # 查看数组大小
+
 
 
 # 二维变量 
