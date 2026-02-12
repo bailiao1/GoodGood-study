@@ -77,3 +77,18 @@ while (( count <= 5 )); do
     echo "Count: $count"
     ((count++))
 done
+
+# 函数
+say_hello() {
+    local name=$1                       # local声明函数内局部变量，$1（传入的第一个参数）
+    echo "hello $name"
+}
+# 调用
+say_hello "Bai"   
+
+add() {
+    local sum$(( $1 + $2 ))
+    echo "Sum is: $sum"
+}
+result=$(add 10 20)
+echo "Sum is: &result"
