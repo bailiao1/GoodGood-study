@@ -1,0 +1,55 @@
+# HTTP 是应用层协议
+一次 HTTP 请求，本质是：客户端发给服务器的一段结构化文本 (HTTP/1.1)
+
+# HTTP 请求的整体结构:
+
+# 请求行 (Request Line)
+方法: GET(获取资源)，POST(提交数据)，PUT(更新数据)，DELETE(删除数据)，PATCH(部分更新)
+路径(例子): /api/user?id=10 (不包含域名，域名在Header里)
+协议版本: HTTP/1.1 , HTTP/2 , HTTP/3
+
+# 请求头 (Headers)是：
+键值对，用于补充说明请求信息
+常见 Header (例子):
+HOST: example.com               # 必须字段(HTTP/1.1),因为一个IP上可能有多个网站(虚拟主机)
+User-Agent: Chrome/120.0        # 告诉服务器来自什么客户端 (浏览器，爬虫，脚本都会不同)
+Accept: */*                     # 告诉服务器能接受什么格式 (application/json)
+Content-Type: application/json  # 说明 Body 是什么格式 (application/json , application/x-www-form-urlencoded ..)
+Content-Length: 27              # 说明 Body 的字节长度
+Authorization: Bearer xxxxxx    # 携带认证信息 (Token / Basic Auth)
+ ..
+# 空行 （Header 结束后必须有一行空行，这是协议规定）
+
+# 请求体 (Body, 可选)
+不是所有请求都有 Body，GET通常没有，POST常带
+JSON示例:
+{
+  "username": "test",
+  "password": "123"
+}
+
+# 完整示例：
+POST /api/login HTTP/1.1
+Host: example.com
+User-Agent: curl/7.81.0
+Content-Type: application/json
+Content-Length: 44
+
+{"username":"admin","password":"123456"}
+
+# 服务器收到后:
+1: 读取第一行 -> 确认方法与路径
+2: 解析 Header -> 获取附加信息
+3: 根据 Content-Length 读取 Body
+4: 交给后端程序处理
+
+# HTTP 响应结构(服务器返回)
+状态行 : HTTP/1.1 200 OK
+响应头 : Content-Type: application/json
+空行
+响应体 : {"status":"success"}
+
+＃ HTTP/2 和 HTTP/3 的区别
+HTTP/2: 二进制格式，多路复用，Header压缩
+HTTP/3: 基于QUIC(UDP)，更低延迟，更抗丢包
+但逻辑结构仍然是: Header + Body
