@@ -22,6 +22,10 @@ cat > script.sh <<'EOF'
 echo "hello linux"
 EOF
 
+# 特殊变量：
+echo $0                     # 脚本名
+echo $#                     # 参数数量
+echo $@                     # 所有参数
 
 # 条件判断（test / [] / [[]]）
 # 数值比较包括: -lt(小于) , -le(小于等于) , -eq(等于) , -ne(不等于) , -gt(大于) , -ge(大于等于)
