@@ -10,6 +10,7 @@ lsb_release -a         # 用的发行版是哪家? (发行方,人类可读名称
 df -h                  # 查看磁盘使用情况（人类可读）
 du -sh folder/         # 查看目录大小
 free -h                # 查看内存使用情况
+type cd                # 可查看指令是否为shell内建（builtin 不会 fork 新进程，必须在 bash 里执行）
 
 # 网络
 ip addr                # 或简写 ip a 查看所有接口IP地址
