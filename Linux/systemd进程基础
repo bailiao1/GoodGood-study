@@ -63,20 +63,25 @@ journalctl -u nginx -f             # 实时跟踪服务日志
 touch /etc/systemd/system/myapp.service
 
 # 2.编辑文件
-[Unit]
-Description=My python Application
-After=network.target
+[Unit]                                   # 所有systemd单元的通用配置段
+Description=My python Application        # 一个人类可读的描述，查看状态/日志时，这个描述会显示出来              
+After=network.target                     # 指定在 network.target 之后启动，确保网络服务启动后才启动 (非强依赖)
 
-[Service]
-User=user_name
-WorkingDirectory=/home/user/myapp
-ExecStart=/usr/bin/python3 /home/user/myapp/app.py
-Restart=always
+[Service]                                # 服务单元特有配置段，定义如何启动，停止服务和服务的行为
+User=user_name                           # 指定运行此服务的用户
+WorkingDirectory=/home/user/myapp        # 设置工作目录，当服务启动后，会以此目录为当前工作目录
 
-[Install]
-WantedBy=multi-user.target
+ExecStart=/usr/bin/python3 /home/user/myapp/app.py    # 定义启动服务时要执行的完整命令行，通常包括可执行文件的绝对路径和参数
+# systemd要求使用绝对路径，且命令应该只在前台运行。
+# 如果脚本需要参数，可以附加在后面： /usr/bin/python3 /home/user/myapp/app.py --port=8080。
+
+Restart=always   # 定义服务退出后何时自动重启，always:表示无论因何原因退出(正常或奔溃)，systemd都会尝试重启
+# 其他常见值：no(默认，不自动重启)，on-failure(仅在非正常退出后重启)，on-success(仅在正常退出后重启)
+
+[Install]                               # 一个声明，定义了如果enabel，那么该服务将如何安装到系统启动流程中(如何启用开机自启)
+WantedBy=multi-user.target              # 当系统进入multi-user.target时，此服务会被启动(即开机自启)。大多数Linux系统默认启动到此target
 
 # 3.执行
-sudo systemctl daemon-reload           # 重新加载systemd配置
+sudo systemctl daemon-reload            # 重新加载systemd配置，使其识别到新的/修改过的服务文件
 sudo systemctl start myapp
-sudo systemctl enable myapp            # 开机自启
+sudo systemctl enable myapp             # 开机自启
