@@ -1,3 +1,22 @@
+# 进程 (进程是运行中的程序实例，每个进程有唯一的 PID )
+
+# ps : 静态快照
+# 常见的进程状态码(R:运行中，S:可中断睡眠(等待事件)，D:不可中断睡眠(通常等待I/O)，T:停止(被作业控制或调试)，Z:僵尸进程(已终止，但父进程未回收)
+ps -p 1                # 查看PID=1的进程，PID1通常是systemd或其他init系统，是所有用户进程的祖先进程。如果PID1出问题，系统基本完蛋
+ps -o pid,ppid,cmd     # 查看当前进程是谁（PID），它爹是谁（PPID），它启动了什么命令（CMD）。每输入一串指令都是一段进程，bash存在也是一段进程
+ps aux                 # 查看所有进程 (a:显示所有终端进程，包括其他用户，u:以用户为主的格式显示，x显示没有控制终端的进程)
+
+ps aux | grep nginx    # 管道组合，查看特定进程（但会包含grep自己，不推荐）
+ps -C nginx -f         # 使用 ps -C name（推荐）-f 查看完整信息
+
+top                    # 动态实时查看进程（类似任务管理器），按P按CPU排序，M按内存排序，q退出
+htop                   # top增强版（需要先安装）
+
+kill 1234              # 给 PID=1234 的进程发信号，通常能关闭，但不是马上
+kill -9 1234           # 强制杀死 PID=1234 的进程
+
+
+           
 # systemd 是linux的初始化系统（init system）和服务器管理器，是启动后的第一个用户空间程序（PID 1）
 # 负责系统服务（网络，ssh，nginx等）
 # 负责后台守护进程（daemon）
@@ -31,4 +50,3 @@ sudo systemctl unmask nginx        # 恢复
 
 systemctl is-enabled               # 查看是否开机自启，可能返回（enabled（是），disabled（否），static（只能被其他unit依赖拉起，不能自启动），maked（完全禁止启动））
 
-           
