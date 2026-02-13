@@ -43,8 +43,15 @@ usermod -aG sudo newuser            # 将用户添加到sudo组
 groups username                     # 查看用户所属组
 
 # 关于 su 和 sudo
-su (switch user): 切换用户，例如：
+# su (switch user): 切换用户，例如：
 su -            # 切换到root(需要root密码)
 su - username   # 切换到其他用户
 
-sudo (superuser do): 以其他用户的 身份(默认为root) 执行命令,需要当前用户有sudo权限
+# sudo (superuser do): 以其他用户的 身份(默认为root) 执行命令,需要当前用户有sudo权限
+sudo command    # command代指任何命令，在当前终端内输入密码后，通常默认缓存5分钟授权，不需要重新输入密码
+sudo -v         # 这会重新刷新sudo的计时器
+
+# 配置sudo权限 : 编辑/etc/sudoers 必须用 visudo 命令，以防语法错误锁死sudo
+username ALL=(ALL:ALL) ALL    # 允许某用户执行任何命令
+%sudo ALL=(ALL:ALL) ALL       # 允许sudo组的所有成员执行任何命令
+username ALL=(ALL) NOPASSWD: /bin/systemctl restart nginx     # 允许某用户无密码启动nginx
