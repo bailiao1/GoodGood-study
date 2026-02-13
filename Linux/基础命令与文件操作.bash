@@ -113,3 +113,37 @@ wc -l                  # 统计行数
 wc -w                  # 统计单词数
 wc -c                  # 统计字节数
 wc -m                  # 统计字符数
+
+
+# nano 编辑文件
+nano file.txt            # 打开文件(如果文件存在，则打开编辑；不存在，则创建新文件)
+nano -l file.txt         # 启动并显示行号
+nano file1.txt file2.txt # 多文件编辑(Alt+, 和 Alt+. 切换文件) 
+
+# nano 基本操作
+Ctrl + O               # 保存文件，然后按回车键确认文件名
+Ctrl + X               # 退出nano
+Ctrl + K               # 剪切当前行(或选中的文本)
+Ctrl + U               # 粘贴剪切/复制的文本
+Ctrl + W               # 搜索文本(输入关键词后回车)
+Ctrl + \               # 替换文本(输入查找词和替换词)
+Ctrl + G               # 显示帮助文档
+Ctrl + C               # 显示当前光标位置
+Ctrl + _               # 跳转到指定行号(实际需要按 Ctrl + shift + -)
+
+# 选择文本
+1.将光标移动要选择的开始位置
+2.按 Ctrl+6 (或Alt+A) 设置标记
+3.用方向键移动光标，选择区域会高亮
+4.按 Ctrl+K 剪切选中内容，或 Alt+^ 复制
+5.到目标位置按 Ctrl+U 粘贴
+
+# 常用技巧
+Alt+U 撤销，Alt+E 重做 (有些版本是Alt+shift+U)
+Alt+# 临时显示行号
+
+# 配置nano ( 创建或编辑 ~/.nanorc )
+set autoindent          # 自动缩进
+set tabsize 4           # 设置 Tab 宽度为4空格
+set linenumbers         # 默认显示行号
+set mouse               # 允许鼠标点击定位
