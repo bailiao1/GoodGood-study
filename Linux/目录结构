@@ -1,0 +1,25 @@
+# /etc - 配置文件的家 ( 存放系统和应用程序的配置文件，几乎所有软件的全局配置都在这 )
+文本文件为主，修改需要root权限
+重要子目录/文件:
+/ect/passwd : 用户账户信息 
+例子: root:x:0:0:root:/root:/bin/bash
+root(用户名) x(密码占位符号，不是真密码) 0(UID:用户id) 0(GID:主组id) root(备注：GECOS) /root(家目录) /bin/bash(启动时登录的Shell)
+
+/ect/shadow : 用户密码加密信息 (仅root可读)
+/etc/group : 用户组信息
+/etc/hosts : 主机名与IP地址的静态映射
+/etc/fstab : 系统启动时自动挂载的文件系统列表
+/etc/apt/sources.list : (Debian/Ubuntu)软件源列表
+/etc/ssh/sshd_config : SSH服务配置
+
+
+# /var - 可变数据仓库 ( 存放经常变化的文件，如日志，缓存，邮件队列，打印任务等 )
+系统运行时持续写入，必须定期清理或轮转
+重要子目录:
+/var/log : 系统日志
+/var/tmp : 较长期临时目录 (重启后保留，比 /tmp(短期临时目录) 持久)
+/var/cache : 应用程序缓存 (如apt的软件包缓存)
+/var/lib : 应用程序状态信息 (如MySQL的数据库文件)
+/var/mail : 用户邮箱文件
+
+# /home - 用户的家 ( 每个普通用户的个人目录，通常位于 /home/用户名 )
