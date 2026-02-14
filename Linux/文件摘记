@@ -1,0 +1,10 @@
+systemd-logind 主配置文件 /etc/systemd/logind.conf
+控制登录会话，电影按键行为，合盖行为，休眠/挂起策略，用户登录状态和设备电源管理
+| 项目                           | 作用       |
+| ---------------------------- | -------- |
+| HandleLidSwitch              | 合盖时行为    |
+| HandleLidSwitchExternalPower | 插电时合盖    |
+| HandleLidSwitchDocked        | 外接显示器时合盖 |
+| HandlePowerKey               | 电源键行为    |
+
+这些是系统级文件，修改后需要sudo systemtctl restart systemd-logind
