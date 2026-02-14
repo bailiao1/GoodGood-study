@@ -12,13 +12,6 @@ du -sh folder/         # 查看目录大小
 free -h                # 查看内存使用情况
 type cd                # 可查看指令是否为shell内建（builtin 不会 fork 新进程，必须在 bash 里执行）
 
-# 网络
-ip addr                # 或简写 ip a 查看所有接口IP地址
-
-ping google.com                    # ping使用 ICMP协议 测试网络连通性，DNS，延迟等。无法测试目标服务是否可用，不能代表真实速度
-curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
-wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
-
 # 管道，将前一个命令的输出作为后一个命令的输入
 ls -la | grep ".txt"        # 只显示txt文件的长格式
 ps aux | grep python        # 查找python进程
