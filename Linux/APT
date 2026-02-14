@@ -1,0 +1,52 @@
+APT (Advanced Packge Tool) 是Ubuntu/Debian系统的软件管理层，本质是一个远程仓库 + 本地索引 + 依赖解析器
+
+当执行例子 sudo apt install nginx 时，实际发生了四件事：
+1.读取本地索引
+/var/lib/apt/lists/ 里面存着远程仓库里有哪些包、什么版本
+
+2.解析依赖关系
+nginx需要哪些库？是否冲突？
+
+3.去远程仓库下载 .deb
+默认仓库来自 /etc/apt/sources.list
+下载到 /var/cache/apt/archives/
+
+4.交给 dpkg 安装
+APT是调度器，dpkg才真正安装.deb的底层工具
+
+
+# 常见问题
+404 Not Found: 本质是本地索引记得有某个版本，但远程仓库已经把那个文件删了/更新了。也就是索引过期
+解决方式: sudo apt update # 这一步会重新下载仓库索引
+
+
+# APT 常用命令结构
+
+# 更新索引（只更新目录清单，不升级软件）
+sudo apt update          
+
+sudo apt upgrade         # 升级已安装软件，但不删除旧依赖
+sudo apt full-upgrade    # 更激进，允许删除旧依赖（系统升级常用）
+
+# 安装软件
+sudo apt install nginx                    # 这里是nginx
+sudo apt install nginx=1.24.0-2ubuntu7.5  # 也可以指定版本
+
+# 删除软件
+sudo apt remove nginx
+sudo apt purge nginx                      # 连配置文件也一起删
+
+sudo apt autoremover                      # 删除不再需要的依赖
+
+# 搜索软件（搜索的是本地索引里的仓库清单，而不是看本机已经安装的东西）
+apt search nginx                          # 搜索所有仓库中可用的软件，不代表已安装
+apt show nginx                            # 显示版本号，依赖，描述，所属仓库
+
+# 查本机已安装的
+apt list --installed                      # 读取本机数据库 /var/lib/dpkg
+pdkg -l | grep nginxwei                      # 管道组合 + 过滤
+apt policy nginx                          # 查看这个软件当前安装了什么版本？仓库有哪些版本？APT打算选哪个版本？
+
+# 两个路径
+仓库索引（远程软件目录）：/var/lib/apt/list/
+已安装数据库（本机安装记录）：/var/lib/dpkg/
