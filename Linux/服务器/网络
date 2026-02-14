@@ -1,0 +1,20 @@
+# 网络
+ip addr                # 查看所有接口IP地址（设备上的网络接口以及它们的地址信息）
+ip a                   # ip addr的简写
+
+# 内容解析
+
+1: lo: <LOOPBACK,UP,LOWER_UP>
+   inet 127.0.0.1/8
+   lnet6 ::1/128
+# 这不是实体网卡，而是系统内部使用的回环接口，作用是：访问本机服务（如：localhost），本机进程之间的通信，不经过物理网络
+
+
+
+
+
+
+
+ping google.com                    # ping使用 ICMP协议 测试网络连通性，DNS，延迟等。无法测试目标服务是否可用，不能代表真实速度
+curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
+wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
