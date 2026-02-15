@@ -1,11 +1,13 @@
-# 网络
+# 查看网络接口
 ip addr                # 查看所有接口IP地址（设备上的网络接口以及它们的地址信息）
 ip a                   # ip addr 的简写
 
 ip link                # 只显示链路层信息（信息包括：接口名，状态，MAC地址，mtu，qdisc）
 ip -s link             # 更专注于链路层细节，可以直接查看统计信息（RX/TX）
 
-# ip addr 内容全解析
+ip route               # 查看内核路由表，metric（路由优先级）当两个接口都 UP 且在同一子网时：内核根据路由表决定出口，一般metric低的优先（有线一般优先于无线）
+
+# ip addr 内容解析
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00   # 表示链路是loopback，剩下部分为MAC地址（回环接口不需要真实MAC地址，所以全零），brd：广播地址，因为不需要所以也全零
     inet 127.0.0.1/8 scope host lo                # scope host：范围只在本机内部有效，不会被路由到外部
@@ -57,10 +59,7 @@ ip -s link             # 更专注于链路层细节，可以直接查看统计�
     inet6 fe80::c118:1559:c60a:7c53/64 scope link noprefixroute 
        valid_lft forever preferred_lft forever
 
-# 当两个接口都 UP 且在同一子网时：内核根据路由表决定出口，一般metric低的优先（有线一般优先于无线）
-ip route      # 查看内核路由表，metric（路由优先级）
+
+# 管理
 
 
-ping google.com                    # ping使用 ICMP协议 测试网络连通性，DNS，延迟等。无法测试目标服务是否可用，不能代表真实速度
-curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
-wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
