@@ -2,17 +2,63 @@
 ip addr                # 查看所有接口IP地址（设备上的网络接口以及它们的地址信息）
 ip a                   # ip addr的简写
 
-# 内容解析
+# ip addr 内容全解析
 
-1: lo: <LOOPBACK,UP,LOWER_UP>
-   inet 127.0.0.1/8
-   lnet6 ::1/128
-# 这不是实体网卡，而是系统内部使用的回环接口，作用是：访问本机服务（如：localhost），本机进程之间的通信，不经过物理网络
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00   # 表示链路是loopback，剩下部分为MAC地址（回环接口不需要真实MAC地址，所以全零），brd：广播地址，因为不需要所以也全零
+    inet 127.0.0.1/8 scope host lo                # scope host：范围只在本机内部有效，不会被路由到外部
+       valid_lft forever preferred_lft forever    # 生命周期：表示永不过期，永远是首选地址（这是固定系统地址）
+    inet6 ::1/128 scope host noprefixroute        # noprefixroute 则是说明不需要根据这个地址自动生成前缀路由
+       valid_lft forever preferred_lft forever
+# lo / LOOPBACK：本地回环（系统内部使用的回环接口，作用是：访问本机服务（如：localhost），本机进程之间的通信，不经过物理网络）
+# UP,LOWER_UP：UP表示逻辑上已启用，LOWER_UP则表示底层链路是可用的. 对真实网卡表示物理链路已连接，对 lo 则是表示恒为true（它不依赖物理连接）
+# mtu 65536：最大传输单元，物理网卡通常为1500. lo是内部通信，不走物理线路，因此可以设得很大
+# qdisc noqueue：队列调度器. 真实网卡需要排队发送数据包，lo 不需要排队，所以为 noqueue
+# state UNKNOW：对物理网卡常见的是 UP/DOWN ，lo没有物理链路状态，所以显示UNKNOW
+# group default：接口分组（ 一般保持默认 ）
+# qlen 1000：发送队列长度（ 对lo影响不大 ）
 
+# 127.0.0.1 是IPv4的地址
+# /8 是子网掩码，二进制（255.0.0.0）表示 ipv4 的32位地址中，前8位是网络位，后24位为主机位
 
+# ::1 是IPv6的回环地址，相当于IPv4的127.0.0.1
+# /128 表示单个地址（v6 的128位IP地址全部由网络位占满，没有主机位。表示这个网段中只有一个地址）
 
+# scope：host（仅本机127.0.0.1）, link（仅局域网连接），global（可参与路由）
 
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000   
+# eno1（en：以太网，o1：第一个以太网接口），BROADCAST（支持广播），MULTICAST（支持组播），UP 逻辑上启用，LOWER_UP 底层链路可用，最大传输1500单元（标准以太网大小），fq_codel（主动管理队列，防止延迟膨胀）state UP（物理链路已连接）default 接口分组默认，发送队列长度1000。
+    link/ether 64:4e:d7:85:cd:17 brd ff:ff:ff:ff:ff:ff  # 真实的 MAC硬件地址（非虚拟），brd广播地址全ff（交换机会把该帧转发给同一广播域中的所有设备）
+    altname enp3s0                             # 有线网卡名
+    inet 192.168.1.31/24 brd 192.168.1.255 scope global dynamic noprefixroute eno1   # 子网掩码/24，brd广播（会向子网.255中所有设备发送数据包），scope global表示可外通信（但在 IPv4 下它仍然是私网地址），eno1说明这个地址绑定在eno1这张物理网卡上
+       valid_lft 43071sec preferred_lft 43071sec      # 生命周期（IP 地址的租期）：43071 秒内，这个IP地址是有效的。43071 秒内，这个地址是首选（上行的dynamic说明，这是DHCP自动分配，到期会自动续租，一般不会中断网络）
+    inet6 2603:900a:16f0:9ee0::1aa5/128 scope global dynamic noprefixroute           # 子网掩码/128，全局地址：用于精确控制或 ISP 策略。 地址可对外通信，dynamic（DHCP自动分配），无自动生成前缀路由 ，以及（Pv6没有 brd 广播）
+       valid_lft 86273sec preferred_lft 86273sec
+    inet6 2603:900a:16f0:9ee0:4c3c:8235:c16:c49/64 scope global temporary dynamic    # IPv6 隐私扩展地址（Privacy Extension）：防止长期跟踪，浏览器访问公网时优先使用它
+       valid_lft 86284sec preferred_lft 85736sec
+    inet6 2603:900a:16f0:9ee0:664e:d7ff:fe85:cd17/64 scope global dynamic mngtmpaddr noprefixroute       # /64 基于 MAC 生成的地址（EUI-64），是根据 MAC 地址自动生成的 IPv6 地址，主要用于入站连接或长期标识。但因为可被追踪，所以浏览器通常不使用它出网
+       valid_lft 86284sec preferred_lft 86284sec
+    inet6 fe80::664e:d7ff:fe85:cd17/64 scope link noprefixroute                      # link-local 地址（fe80::），永远存在（是 IPv6 的基础地址）：只在局域网有效，不可路由到公网。用于：邻居发现（NDP），路由发现，局域网通信
+       valid_lft forever preferred_lft forever
+# IPv6 设计目标是：每个设备可以拥有多个地址，分工使用。所以一接口可以多地址
 
+3: wlo1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+# wlo1（wl：wireless，o1：主板上的第一个无线接口），mtu 1500（Wi-Fi 的mtu大小也通常对齐为 1500），qdisc noqueue（无线接口常见，驱动层自行管理。而有线接口的fq_codel则有主动队列管理）
+    link/ether 40:1a:58:87:bc:7a brd ff:ff:ff:ff:ff:ff      # 真实无线网卡硬件地址
+    altname wlp4s0                             # 基于 PCI 位置的旧命名
+    inet 192.168.1.123/24 brd 192.168.1.255 scope global dynamic noprefixroute wlo1   # 与有线在同一子网 192.168.1.0/24（但默认情况下，系统会通过默认路由选择其中一个作为出网路径（通常优先有线）），wlo1说明这个地址绑定在wlo1下
+       valid_lft 43149sec preferred_lft 43149sec
+    inet6 2603:900a:16f0:9ee0::14cb/128 scope global dynamic noprefixroute            # 结构与 eno1 相同，说明：此 Wi-Fi 网络同样支持原生 IPv6，双栈在无线与有线两侧都启用
+       valid_lft 86349sec preferred_lft 86349sec
+    inet6 2603:900a:16f0:9ee0:b728:4e4f:cb04:e00d/64 scope global temporary dynamic 
+       valid_lft 86238sec preferred_lft 85983sec
+    inet6 2603:900a:16f0:9ee0:d790:243f:81e9:2641/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 86238sec preferred_lft 86238sec
+    inet6 fe80::c118:1559:c60a:7c53/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+# 当两个接口都 UP 且在同一子网时：内核根据路由表决定出口，一般metric低的优先（有线一般优先于无线）
+ip route      # 查看内核路由表，metric（路由优先级）
 
 
 ping google.com                    # ping使用 ICMP协议 测试网络连通性，DNS，延迟等。无法测试目标服务是否可用，不能代表真实速度
