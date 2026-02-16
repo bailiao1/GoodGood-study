@@ -44,7 +44,7 @@ curl https://example.com          # 会直接输出网页 HTML
 curl -I https://example.com       # 只看响应头，输出类似 HTTP/2 200 serber:nginx
 curl -v https://example.com       # 显示完整请求过程（包括DNS解析，TCP连接，TLS握手。是调试HTTPS最常见的方式）
 
-# curl -v 例子（已安装nginx,默认监听本机80端口并返回响应）
+# curl -v 例子（已安装nginx,默认监听本机80端口并返回响应）：
 * Host localhost:80 was resolved.
 * IPv6: ::1
 * IPv4: 127.0.0.1
@@ -67,29 +67,12 @@ curl -v https://example.com       # 显示完整请求过程（包括DNS解析�
 < 
 <!DOCTYPE html>
 <html>
-<head>
-<title>Welcome to nginx!</title>
-<style>
-html { color-scheme: light dark; }
-body { width: 35em; margin: 0 auto;
-font-family: Tahoma, Verdana, Arial, sans-serif; }
-</style>
-</head>
-<body>
-<h1>Welcome to nginx!</h1>
-<p>If you see this page, the nginx web server is successfully installed and
-working. Further configuration is required.</p>
-
-<p>For online documentation and support please refer to
-<a href="http://nginx.org/">nginx.org</a>.<br/>
-Commercial support is available at
-<a href="http://nginx.com/">nginx.com</a>.</p>
-
-<p><em>Thank you for using nginx.</em></p>
-</body>
+# ... 网页内容
 </html>
 * Connection #0 to host localhost left intact
 
-
-
+# 从url下载资源
 wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
+
+# DNS 查询
+nslookup google.com
