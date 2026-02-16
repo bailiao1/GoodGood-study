@@ -5,8 +5,6 @@ ip a                   # ip addr 的简写
 ip link                # 只显示链路层信息（信息包括：接口名，状态，MAC地址，mtu，qdisc）
 ip -s link             # 更专注于链路层细节，可以直接查看统计信息（RX/TX）
 
-ip route               # 查看内核路由表，metric（路由优先级）当两个接口都 UP 且在同一子网时：内核根据路由表决定出口，一般metric低的优先（有线一般优先于无线）
-
 # ip addr 内容解析
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00   # 表示链路是loopback，剩下部分为MAC地址（回环接口不需要真实MAC地址，所以全零），brd：广播地址，因为不需要所以也全零
@@ -48,7 +46,7 @@ ip route               # 查看内核路由表，metric（路由优先级）当�
 # wlo1（wl：wireless，o1：主板上的第一个无线接口），mtu 1500（Wi-Fi 的mtu大小也通常对齐为 1500），qdisc noqueue（无线接口常见，驱动层自行管理。而有线接口的fq_codel则有主动队列管理）
     link/ether 40:1a:58:87:bc:7a brd ff:ff:ff:ff:ff:ff      # 真实无线网卡硬件地址
     altname wlp4s0                             # 基于 PCI 位置的旧命名
-    inet 192.168.1.123/24 brd 192.168.1.255 scope global dynamic noprefixroute wlo1   # 与有线在同一子网 192.168.1.0/24（但默认情况下，系统会通过默认路由选择其中一个作为出网路径（通常优先有线）），wlo1说明这个地址绑定在wlo1下
+    inet 192.168.1.123/24 brd 192.168.1.255 scope global dynamic noprefixroute wlo1   # 与有线在同一子网 192.168.1.0/24（但默认情况下，系统会通过默认路由选择其中一个作为出网路径（通常优先有线（metric更低）））wlo1说明这个地址绑定在wlo1下
        valid_lft 43149sec preferred_lft 43149sec
     inet6 2603:900a:16f0:9ee0::14cb/128 scope global dynamic noprefixroute            # 结构与 eno1 相同，说明：此 Wi-Fi 网络同样支持原生 IPv6，双栈在无线与有线两侧都启用
        valid_lft 86349sec preferred_lft 86349sec
@@ -60,6 +58,70 @@ ip route               # 查看内核路由表，metric（路由优先级）当�
        valid_lft forever preferred_lft forever
 
 
-# 管理
+# 添加 IP 地址：add <IP地址/子网掩码> dev <接口名>
+sudo ip addr add 192.168.1.100/24 dev eno1        # 给 eno1 添加一个额外的 IP（用 add 添加的地址重启后会消失（为临时配置）永久配置则需要修改网络配置文件）
+sudo ip addr add 2001:db8::1/64 dev enol          # 添加 IPv6 地址
+ip addr show eno1                                 # 查看是否添加成功
+
+# 删除 IP 地址（同样为临时配置，通过 iproute2 直接操作内核中的网络栈，不会修改任何持久化配置文件）
+sudo ip addr del 192.168.1.100/24 dev eno1        # 删除指定IP
+sudo ip addr flush del eno1                       # 删除指定接口上的所有IP (清空)
+
+# IP 命名中并没有直接修改的功能，只能先删除后加
+
+# 管理网络接口（非重新加载配置，只是操作二层接口，使其暂时不可用）
+sudo ip link set eno1 down                        # 禁用接口（DOWN）
+sudo ip link set eno1 up                          # 启用接口（UP）
+
+# 修改 MTU（最大传输单元）
+sudo ip link set eno1 mtu 9000
+
+# 修改 MAC 地址（同样为临时配置，重启后恢复）
+sudo ip link set eno1 down                        # 需要先禁用接口（否则很多驱动会拒绝）
+sudo ip link set eno1 address 00:11:22:33:44:55   # 同一局域网内，不能有两个相同的 MAC地址。且某些企业交换机会检测 MAC 更变，WiFi在连接状态下的修改也通常无效
+sudo ip link set eno1 up                          # 重新启用
+
+# 路由表管理
+ip route                   # 查看所有内核路由表，metric（路由优先级）当两个接口都 UP 且在同一子网时：内核根据路由表决定出口，一般metric低的优先（有线一般优先于无线）
+ip route show dev eno1     # 查看特定接口的路由
+
+ip route get 8.8.8.8       # 查看到达特定 IP 的路由
+# 输出示例：
+8.8.8.8 via 192.168.1.1 dev eno1 src 192.168.1.31 uid 1000
+# 表示要访问目标ip，数据包会发给192.168.1.1（默认网关/路由器），因为8.8.8.8并不在本地网段
+# dev eno1 表示使用的接口，src则是表示出口时会使用的 源IP（也就是本机器在局域网中的地址）uid 1000 则是表示哪个用户触发的路由查询（1000通常是第一个普通用户）
+
+# 添加路由
+sudo ip route add default via 192.1.1 dev eno1                 # 添加默认网关
+sudo ip route add 10.0.0.0/8 via 192.168.1.254 dev eno1        # 添加静态路由（访问 10.0.0.0/8 网段走 192.168.1.254）
+sudo ip route add 172.16.0.0/16 dev eno1                       # 添加直连路由（不经过网关）
+
+sudo ip route add default via 192.168.1.1 dev eno1 metric 50   # 指定metric（优先级）
+
+# 删除路由
+sudo ip route del default via 192.168.1.1 dev eno1             # 删除默认网关
+sudo ip route del 10.0.0.0/8                                   # 删除静态网关
+sudo ip route flush dev eno1                                   # 清空特定接口的所有路由
+
+sudo ip route change default via 192.168.1.2 dev eno1          # 修改默认网关
 
 
+# ARP 表管理（邻居表）
+# ARP（Address Resolution Protocol）用于将 IP地址 解析为 MAC地址
+ip neigh                 # 查看所有邻居（ARP缓存）
+ip neigh show dev eno1   # 查看特定接口的 ARP表
+# ARP 状态：REACJABLE（可达，最近通信过），STALE（过期，但可能仍有效），DELAY（正在验证），PROBE（正在探测），FAILED（无法到达）
+
+sudo ip neigh add 192.168.1.200 lladdr 00:11:22:33:44:55 dev neo1                     # 添加静态 ARP
+sudo ip neigh add 192.168.1.200 lladdr 00:11:22:33:44:55 dev neo1 nud permanent       # 添加永久静态 ARP（不会过期）
+
+sudo ip neigh del 192.168.1.200 dev neo1                       # 删除指定条目
+sudo ip neigh flush dev eno1                                   # 清空特定接口的 ARP 缓存
+
+
+# 监控网络变化
+ip monitor                # 监控所有变化
+ip monitor address        # 监控 IP地址 变化
+ip monitor route          # 监控路由变化
+
+# 永久配置需要编辑路由文件：Ubuntu/Debian（ /etc/netplan/*.yaml 或 /etc/network/interfaces ）
