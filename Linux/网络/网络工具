@@ -76,3 +76,14 @@ wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资�
 
 # DNS 查询
 nslookup google.com
+
+# 例子：
+Server:		127.0.0.53                # 系统DNS服务器，Ubuntu上通常是 systemd-rersolved 提供的本地DNS代理
+Address:	127.0.0.53#53             # 端口是53（DNS标准端口）
+
+Non-authoritative answer:          # 声明返回结果来自缓存/递归查询，非域名权威服务器的直接返回
+Name:	google.com                   # 目标域名
+Address: 142.250.190.110           # 目标的IPv4地址
+Name:	google.com
+Address: 2607:f8b0:4009:818::200e  # IPv6地址
+
