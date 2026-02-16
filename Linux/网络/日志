@@ -6,7 +6,26 @@ sudo tail -n 50 /var/log/nginx/access.log     # 查看最后50行
 sudo grep '404' /var/log/nginx/access.log            # 搜索某个状态码 (如 404 )
 sudo grep 192.168.1.198 /var/log.nginx/access.log    # 搜索 IP 同理
 
-# 条目例子
+# 客户端IP -- [访问时间] "请求方法/路径 协议" 状态码 返回字节数 "来源页面" "User-Agent"
 192.168.1.198 - - [16/Feb/2026:09:56:55 -0500] "GET /favicon.ico HTTP/1.1" 404 196 "http://192.168.1.31/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0"
 192.168.1.135 - - [16/Feb/2026:09:57:29 -0500] "GET / HTTP/1.1" 200 409 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.2 Mobile/15E148 Safari/604.1"
+
+
+# 分析访问行为
+awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -nr                     # 统计访问最多的 IP，看谁访问次数最多
+awk '{print $7}' /var/log/nginx/access.log | sort | uniq -c | sort -nr | head              # 统计访问最多的 URL
+awk grep '404' /var/log/nginx/access.log | awk '{print $7}' | sort | uniq -c | sort -nr    # 统计404最多的路径，观察是否有人在扫描不存在的页面
+
+# 异常日志行为
+大量404：可能是扫描漏洞，暴露探测路径
+奇怪路径：如（/wp-admin ，/phpmyadmin ，/.env ，/config.php ）如果没有安装这些东西，却被访问，很可能是自动扫描
+奇怪 User-Agent：如（curl，python-requests，sqlmap，masscan）这些通常是脚本或扫描器
+
+# 目录
+/var/log/nginx/error.log          # 记录配置错误，权限问题，后端连接失败，文件找不到
+
+# 日志轮转 (日志不会无限变大)
+# Linux 会用 /etc/logrotate.d/nginx 自动压缩旧日志，会出现如（access.log , access.log.1 , access.log.2.gz 等）
+
+
 
