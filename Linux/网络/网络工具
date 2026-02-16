@@ -1,11 +1,14 @@
-# 连通性
+# 连通性测试
 ping google.com                    # ping 基于ICMP协议 测试网络连通性，DNS，延迟等.. 无法测试目标服务是否可用，不能代表真实速度
 
 # 例子：
-PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes    # PING 目标域名 (DNS解析后的 IPv6 地址)
+PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes    # PING 目标域名 (DNS解析后的 IPv6 地址) 每个ICMP数据包发送56字节数据（加上 ICMP 头部8字节，总共64字节）
 64 bytes from ord30s22-in-x0e.1e100.net (2607:f8b0:4009:80b::200e): icmp_seq=1 ttl=116 time=14.4 ms
-# 
+# 从 Google 服务器收到64字节的响应数据：icmp_seq=1(第一个ICMP请求包) ttl=116(Time To Live：每经过一个服务器-1，数值越大，说明跳转越少，判断网络路径长短) time=14.4 ms（往返实际/毫秒） 
 
+# 查看经过的路由
+sudo apt install traceroute        # 需要安装
+traceroute 8.8.8.8                 # 使用查看前往 目标ip 需要经过的路由
 
 
 curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
