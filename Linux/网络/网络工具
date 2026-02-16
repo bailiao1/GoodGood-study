@@ -44,6 +44,52 @@ curl https://example.com          # 会直接输出网页 HTML
 curl -I https://example.com       # 只看响应头，输出类似 HTTP/2 200 serber:nginx
 curl -v https://example.com       # 显示完整请求过程（包括DNS解析，TCP连接，TLS握手。是调试HTTPS最常见的方式）
 
+# curl -v 例子（已安装nginx,默认监听本机80端口并返回响应）
+* Host localhost:80 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:80...
+* Connected to localhost (::1) port 80
+> GET / HTTP/1.1
+> Host: localhost
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: nginx/1.24.0 (Ubuntu)
+< Date: Mon, 16 Feb 2026 22:11:47 GMT
+< Content-Type: text/html
+< Content-Length: 615
+< Last-Modified: Sat, 14 Feb 2026 17:38:28 GMT
+< Connection: keep-alive
+< ETag: "6990b314-267"
+< Accept-Ranges: bytes
+< 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+* Connection #0 to host localhost left intact
+
 
 
 wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
