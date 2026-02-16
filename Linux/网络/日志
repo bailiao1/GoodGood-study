@@ -1,0 +1,10 @@
+# 常用日志命令 ( nginx为例 )
+
+sudo tail -f /var/log/nginx/access.log        # 追踪并实时查看
+sudo tail -n 50 /var/log/nginx/access.log     # 查看最后50行
+
+sudo grep '404' /var/log/nginx/access.log            # 搜索某个状态码 (如 404 )
+sudo grep 192.168.1.198 /var/log.nginx/access.log    # 搜索 IP 同理
+
+# 条目例子
+192.168.1.198 --
