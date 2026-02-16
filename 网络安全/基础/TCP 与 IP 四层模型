@@ -48,7 +48,7 @@ Ping 成功只能代表网络层可达 (ICMP正常) , 并不代表应用层可�
 谁先发起挥手并不固定（可以是客户端，也可以是服务器）)
 第一次: A -> B (FIN : A 表示我不再发送数据，进入FIN_WAIT_1)
 第二次: B -> A (ACK : B 表示确认收到FIN，A 进入FIN_WAIT_2 ，B 进入CLOSE_WAIT 。此时 A 不能再发数据，但仍可以接收 B 的数据)
-第三次: B -> A (FIN : B 处理完剩余数据后，也关闭发送通道)
+第三次: B -> A (FIN : B 处理完剩余数据后，也关闭发送通道，进入LAST_ACK)
 第四次: A -> B (ACK : A 确认，A 进入 TIME_WAIT 状态，通常2MSL,防止最后一个 ACK 丢失，防止旧连接的数据干扰新连接)
 
 # 建立连接常见状态 (LISTEN 、SYN_SENT 、SYN_RECEIVED 、ESTABLISHED)
