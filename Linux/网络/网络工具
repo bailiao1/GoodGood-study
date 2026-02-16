@@ -1,4 +1,4 @@
-# 连通性测试
+# 连通性
 ping google.com                    # ping 基于ICMP协议 测试网络连通性，DNS，延迟等.. 无法测试目标服务是否可用，不能代表真实速度
 
 # 例子：
@@ -6,26 +6,44 @@ PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes    # PING 目标域名 
 64 bytes from ord30s22-in-x0e.1e100.net (2607:f8b0:4009:80b::200e): icmp_seq=1 ttl=116 time=14.4 ms
 # 从 Google 服务器收到64字节的响应数据：icmp_seq=1(第一个ICMP请求包) ttl=116(Time To Live：每经过一个服务器-1，数值越大，说明跳转越少，判断网络路径长短) time=14.4 ms（往返实际/毫秒） 
 
+
 # 查看经过的路由
 sudo apt install traceroute        # 需要安装
 traceroute 8.8.8.8                 # 使用查看前往 目标ip 需要经过的路由
+traceroute -m 50 8.8.8.8           # 可修改最大跳数再出发
+traceroute -s 100 8.8.8.8          # 或字节包大小
 
 # 输出例子：
-traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
- 1  SAX2V1S.lan (192.168.1.1)  3.143 ms  3.122 ms  3.116 ms
- 2  syn-047-231-165-158.res.spectrum.com (47.231.165.158)  3.207 ms  3.100 ms  3.192 ms
- 3  * syn-047-231-165-158.res.spectrum.com (47.231.165.158)  12.921 ms *
- 4  * * *
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets                               # 前往目标IP ，默认最大跳数为30（避免无限尝试）, 默认 60字节/包
+ 1  SAX2V1S.lan (192.168.1.1)  3.143 ms  3.122 ms  3.116 ms                                 # 第一跳（Hop 1）：本地服务器（IP地址）用时3ms
+ 2  syn-047-231-165-158.res.spectrum.com (47.231.165.158)  3.207 ms  3.100 ms  3.192 ms     # 进入ISP(Spectrum)，仍然3ms
+ 3  * syn-047-231-165-158.res.spectrum.com (47.231.165.158)  12.921 ms *                    # 出现 * 可能是该路由器限制 ICMP TTL exceeded 回复 ，或者启用了 rate ilmit（但后续跳数正常，并未丢包）
+ 4  * * *                                                                                   # 完全不回复ICMP，可能是 禁Ping，防止被探测，但数据包仍然转发
  5  * * *
- 6  syn-047-231-165-158.res.spectrum.com (47.231.165.158)  14.614 ms  10.594 ms  10.584 ms
- 7  lag-63.indp10-cbr1.netops.charter.com (71.44.237.152)  15.797 ms  17.195 ms  15.955 ms
+ 6  syn-047-231-165-158.res.spectrum.com (47.231.165.158)  14.614 ms  10.594 ms  10.584 ms  # 延迟上升，说明开始进入更核心的网络层
+ 7  lag-63.indp10-cbr1.netops.charter.com (71.44.237.152)  15.797 ms  17.195 ms  15.955 ms  # indp 可能是 Indianapolis ， cbr = Core Backbone Router， 说明进入Charter核心骨干网
  8  * * *
- 9  lag-11.chcgildt87w-bcr00.netops.charter.com (66.109.6.20)  19.129 ms lag-21.chcgildt87w-bcr00.netops.charter.com (66.109.5.136)  19.124 ms lag-11.chcgildt87w-bcr00.netops.charter.com (66.109.6.20)  16.706 ms
-10  * 74.125.48.174 (74.125.48.174)  14.530 ms syn-024-030-201-173.inf.spectrum.com (24.30.201.173)  16.540 ms
-11  * 192.178.249.239 (192.178.249.239)  17.472 ms *
-12  dns.google (8.8.8.8)  16.327 ms  16.254 ms  16.043 ms
+ 9  lag-11.chcgildt87w-bcr00.netops.charter.com (66.109.6.20)  19.129 ms lag-21.chcgildt87w-bcr00.netops.charter.com (66.109.5.136)  19.124 ms lag-11.chcgildt87w-bcr00.netops.charter.com (66.109.6.20)  16.706 ms    # chcgildt -> Chicago（处于美国中部网络区域）
+10  * 74.125.48.174 (74.125.48.174)  14.530 ms syn-024-030-201-173.inf.spectrum.com (24.30.201.173)  16.540 ms    # 74.125.48.174 （Googlr ASN 的 IP）这里开始进入 Google 网络
+11  * 192.178.249.239 (192.178.249.239)  17.472 ms *                                        # Google 内部网络节点
+12  dns.google (8.8.8.8)  16.327 ms  16.254 ms  16.043 ms                                   # 终点，最终 RTT~16ms，延迟很低（没跨洲，没跨大区，是区域 Google POP 节点）
+
+
+# 查看监听端口
+ss -lnt                            # l -> listening(只显示处于 LISTEN 状态的套接字) ，n -> 数字形式（显示地址和端口，不解析构成域名） , t -> TCP
+# State（套接字状态），RRecv-Q（接收队列长度：等待应用读取的数据），Send-Q（发送队列长度：等待发送的数据），Local Address:Port(本地监听的IP和端口)，Peer Address:Post(对端地址，LSTEN状态常为*)，Process（关联进程，需要 -p 才显示）
+# LISTEN  0   128   0.0.0.0:80   0.0.0.0:*   # 某个进程在监听 80端口
+ss -ant                            # 查看当前连接
+# 常见TCP状态：LISTEN（正在监听端口），SYN-SENT（主动发起连接），SYN-RECV（收到连接请求），ESTAB（已建立连接），FIN-WAIT（主动关闭一方），CLOSE-WAIT（被动关闭一方），TIME-WAIT（等待彻底关闭）
+sudo ss -lntp                           # 显示进程
+
+
+# HTTP请求
+curl https://api.ipify.or         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
+curl https://example.com          # 会直接输出网页 HTML
+curl -I https://example.com       # 只看响应头，输出类似 HTTP/2 200 serber:nginx
+curl -v https://example.com       # 显示完整请求过程（包括DNS解析，TCP连接，TLS握手。是调试HTTPS最常见的方式）
 
 
 
-curl https://api.ipify.org         # 查看公网ip，curl是主动请求资源并看返回结果的网络工具
 wget https://example.com/file.zip  # 面向下载的工具，从 URL 下载资源，直接保存成文件，文件名默认取 URL 最后的部分
