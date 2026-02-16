@@ -87,3 +87,10 @@ Address: 142.250.190.110           # 目标的IPv4地址
 Name:	google.com
 Address: 2607:f8b0:4009:818::200e  # IPv6地址
 
+# 更专业的方法（需要先 sudo apt install dnsutils 下载应用）
+dig google.com                     # 会显示 A记录，TTL（解析结果的可缓存时长），解析服务器
+
+# 实时抓包（CLI版Wireshark）
+sudo tcpdump -i eth0
+sudo tcpdump -i eth0 icmp          # 只抓ping
+sudo tcpdump -i eth0 port 443      # 抓端口
