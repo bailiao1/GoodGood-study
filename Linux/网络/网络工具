@@ -1,9 +1,10 @@
 # 连通性
 ping google.com                    # ping 基于ICMP协议 测试网络连通性，DNS，延迟等.. 无法测试目标服务是否可用，不能代表真实速度
 
-PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes
+# 例子：
+PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes    # PING 目标域名 (DNS解析后的 IPv6 地址)
 64 bytes from ord30s22-in-x0e.1e100.net (2607:f8b0:4009:80b::200e): icmp_seq=1 ttl=116 time=14.4 ms
-
+# 
 
 
 
