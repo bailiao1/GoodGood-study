@@ -60,7 +60,7 @@ journalctl -u nginx -f             # 实时跟踪服务日志
 # 假设写了一个python脚本 /home/user/myapp/app.py , 需要让它作为服务运行
 
 # 1.创建文件
-touch /etc/systemd/system/myapp.service
+nano /etc/systemd/system/myapp.service
 
 # 2.编辑文件
 [Unit]                                   # 所有systemd单元的通用配置段
