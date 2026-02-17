@@ -56,3 +56,10 @@ Ping 成功只能代表网络层可达 (ICMP正常) , 并不代表应用层可�
 
 # UDP (无连接，不可靠，面向报文，延迟比可靠更重要)
 头部结构(8字节)：源端口，目的端口，长度，效验和
+
+
+# TLS 加密（基于 TCP，保证了机密性，完整性，身份认证）
+第一步：Client Hello（客户端发支持的TLS版本，支持的加密算法，随机数，SNI（访问的域名））
+第二步：Server Hello（服务器返回选择的加密算法，服务器随机数，密钥交换参数）
+第三步：服务器继续发送：数字证书（含公钥），CA签名链。浏览器会验证证书合法性，是否由可信CA签发，是否匹配域名..
+在 TLSv1.3 中，Server Hello 后很快就 APPlication Date（只需要一个往返 1RTT，支持 0-RTT）之后抓包只能看到 Encrypted Application Date ，无法看到 HTTP 内容（HTTP 在 TLS 之上，而 TLS 加密了所有 payload）
