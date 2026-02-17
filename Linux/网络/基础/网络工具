@@ -37,7 +37,7 @@ ss -lnt                            # l -> listening(只显示处于 LISTEN 状�
 # LISTEN  0   128   0.0.0.0:80   0.0.0.0:*   # 某个进程在监听 80端口
 ss -ant                            # 查看当前连接
 # 常见TCP状态：LISTEN（正在监听端口），SYN-SENT（主动发起连接），SYN-RECV（收到连接请求），ESTAB（已建立连接），FIN-WAIT（主动关闭一方），CLOSE-WAIT（被动关闭一方），TIME-WAIT（等待彻底关闭）
-sudo ss -lntp                           # 显示进程
+sudo ss -lntup                     # 显示LISTEN,TCP,UDP,进程,不做域名解析
 
 
 # HTTP请求
