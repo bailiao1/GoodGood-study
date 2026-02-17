@@ -9,7 +9,9 @@ PING google.com (2607:f8b0:4009:80b::200e) 56 data bytes    # PING 目标域名 
 
 # 查看经过的路由
 sudo apt install traceroute        # 需要安装
-traceroute 8.8.8.8                 # 使用查看前往 目标ip 需要经过的路由
+traceroute 8.8.8.8                 # 使用查看前往 目标ip 需要经过的路由I (默认使用UDP)
+traceroute -I 8.8.8.8              # 使用 ICMP
+traceroute -T 8.8.8.8              # 使用 TCP
 traceroute -m 50 8.8.8.8           # 可修改最大跳数再出发
 traceroute -s 100 8.8.8.8          # 或字节包大小
 
