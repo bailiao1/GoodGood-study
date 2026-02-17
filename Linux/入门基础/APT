@@ -44,7 +44,7 @@ apt show nginx                            # 显示版本号，依赖，描述，
 
 # 查本机已安装的
 apt list --installed                      # 读取本机数据库 /var/lib/dpkg
-pdkg -l | grep nginxwei                      # 管道组合 + 过滤
+dpkg -l | grep nginxwei                      # 管道组合 + 过滤
 apt policy nginx                          # 查看这个软件当前安装了什么版本？仓库有哪些版本？APT打算选哪个版本？
 
 # 两个路径
