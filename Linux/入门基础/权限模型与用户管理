@@ -30,13 +30,16 @@ chmod u+x script.sh          # 为拥有者添加执行权限
 chmod +x script.sh           # 相当于 chmod a+x , a=all(u+g+o)
 chmod user:group script.sh   # 更改文件拥有者和组
 
+sudo chown -R user:group /srv/myapp   # 递归更改目录拥有者/组
 
 # 用户管理 (sudo,su)
 用户 : 对每个用户有唯一的用户名和UID(用户ID)，root的UID=0
 组 : 用户组的集合，GID(组ID)，一个用户可以属于多个组
 
 # 常用命令：
-useradd -m -s /bin/bash newuser     # 创建用户，创建家目录，指定shell
+useradd -m -s /bin/bash newuser          # 创建用户，-m(创建家目录)，-s(指定shell)
+useradd -r -s /usr/sbin/nologin newuser  # 创建用户，-r(创建系统用户)，指定到nologin(指定shell为nologin，该shell会拒绝登录。无法登录终端，旨在以最小权限运行)
+
 passwd newuser                      # 设置密码
 userdel -r newuser                  # 删除用户并递归删除家目录
 usermod -aG sudo newuser            # 将用户添加到sudo组
