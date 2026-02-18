@@ -8,7 +8,7 @@ python3 test.py
 python3 -m http.server 3000    # -m:运行一个库的程序
 
 python3 -m venv .venv          # 在当前目录创建虚拟环境目录
-source .venv/bin/activate      # 进入虚拟环境
+source .venv/bin/activate      # 进入虚拟环境，退出用deactivate
 pip install fastapi uvicorn    # pip 安装包到 .venv/lib/python3/site-pakeages/ 不会污染系统环境
 
 # 脚本直接运行
