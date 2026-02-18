@@ -43,6 +43,9 @@ cp -r folder1 folder2           # 递归复制目录
 mv file.txt floder1/            # 移动file到floder1下（可直接移动目录）
 mv old_name.txt new_name.txt    # 重命名
 
+# 创建软链接（类似Windows的快捷方式）
+ln -s sit_a/file.txt sit_e/     # 将a目录下的file文件创建软链接到e目录下
+
 # 查看文件
 cat file.txt           # 显示整个文件
 less file.txt          # 分页查看（可向前也能向后 1 <-> 2）
