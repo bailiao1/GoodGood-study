@@ -1,0 +1,29 @@
+# 交互模式
+python3        # 直接输入，会进入 >>> 可以立即执行代码 exit() 或 Ctrl+D 退出
+
+# 执行文件
+python3 test.py
+
+# 模块方式运行
+python3 -m http.server 3000    # -m:运行一个库的程序
+
+python3 -m venv .venv          # 在当前目录创建虚拟环境目录
+source .venv/bin/activate      # 进入虚拟环境
+pip install fastapi uvicorn    # pip 安装包到 .venv/lib/python3/site-pakeages/ 不会污染系统环境
+
+# 脚本直接运行
+#!/usr/bin/env python3         # shenbang
+print("hello world")           # 这时候 chmod +x test.py 后就可以像普通命令一样运行
+
+
+# 传参
+import sys
+print(sys.argv)
+# 运行
+python3 test.py hello world    # 输出：["test.py","hello","world"]
+
+
+# 其他常用终端命令
+python3 -version               # 查看版本
+which python3                  # 查看路径
+pip list                       # 查看安装包
