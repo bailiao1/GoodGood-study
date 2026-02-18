@@ -28,6 +28,8 @@ ls >> file.txt              # 追加写入
 command 2> error.los        # 把错误信息（stderr）单独重定向到文件,command指代任何指令（但确实存在一个同名的内建指令）
                             # command -v ls 用来执行命令或检查命令类型
 
+echo "hello" | sudo tee file.txt    # 有时候因为 > 重定向是由当前用户执行，不受sudo影响，会提示权限不足。而tee命令读取标准输入，然后同时输出到屏幕和文件（可受到sudo影响）
+
 # 输入重定向
 sort < file.txt             # 从文件中读取输入
 cat << EOF                  # 多行输入，把后面的多行文本作为标准输入传给 cat
