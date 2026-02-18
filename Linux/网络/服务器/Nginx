@@ -16,3 +16,24 @@ sudo apt install nginx
 /var/log/nginx/error.log
 
 # 最小静态站点
+sudo mkdir -p /srv/site1      # 创建目录
+echo "<h1>Sitel1</h1>" | sudo tee /srv/site1/index.html    # 写入内容
+
+sudo nano /etc/nginx/sites-sites-available/site1           # 新建配置
+# 写入：
+server {
+    listen 80;
+    server_name _;
+
+    root /srv/site1;
+    index index.heml;
+
+    location / {                                           # 定义如何处理请求，/ 表示匹配所有路径（根路径及以下所URL）
+      try_files $uri $uri/ =404;                           # 依次尝试以下方法，$uri（先找有没有这个文件）， $uri（再找有没有这个目录），如果前两步都找不到，就返回404错误
+    }
+
+}
+# 启用：
+sudo ln -s /etc/nginx/sites-available/site1 /etc/nginx/sites-enabled/    # 制作软链接，禁用时直接删除软链接，不需要动文件
+sudo nginx -t    # 测试
+sudo systemctl reload nginx    # 重新加载
