@@ -1,0 +1,18 @@
+# Nginx：一个高性能的开源Web服务器，常作为：
+反向代理（将客户端请求转发给后端服务器）
+负载均衡（将流量分发到多台服务器）
+静态文件服务（高效提供HTML，CSS，图片等静态资源
+HTTP缓存（缓存后端响应，减少服务器压力）
+
+# 安装（默认监听80端口）
+sudo apt install nginx
+
+# 配置目录结构
+主配置：/etc/nginx/nginx.conf
+站点配置：/etc/nginx/sites-available/
+启用站点(存放软链接，非真实文件)：/etc/nginx/sites-enabled/
+日志：
+/var/log/nginx/access.log
+/var/log/nginx/error.log
+
+# 最小静态站点
