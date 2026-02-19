@@ -20,14 +20,16 @@ func _enter_tree():
   print(d)                                          # false
 
 
-# 数组
+# 数组(可以放任何类型)
 var b = [1,2.1,"3",true]
 # 可指定类型以及数组内的元素类型
 var b:Array[int] = [1,2,3,4,5]
 b.append(6)					    # 添加元素
-b.eraase(4)					    # 删除指定元素(优先删除靠前的数据)
-b.size 						    # 查看数组大小
 
+b.eraase(4)					    # 删除指定元素(优先删除靠前的数据)
+b.remove_at(4)
+
+b.size 						    # 查看数组大小
 
 
 # 二维变量 
@@ -62,7 +64,4 @@ var node1 = Node2D.new()
 var node2 = node1    	 	# 同一实例
 node2.position.x = 100
 print(node1.position) 		# ➜ (100, 0)
-
-
- 
 
