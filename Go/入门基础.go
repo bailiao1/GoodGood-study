@@ -71,7 +71,7 @@ fmt.Println("结果:", result)
 // 数组（长度固定）
 arr := [3]int{1,2,3}
 
-// 切片（长度可变）
+// 切片slice（长度可变）
 s := []int{1,2,3}
 s = append(s,4,5)
 fmt.Println(s)      // [1 2 3 4 5]
@@ -113,4 +113,49 @@ p := &x           // p 是 x 的地址
 *p = 20           // *解指针，通过指针修改x
 fmt.Println(x)    // 20
 
-// 
+
+// 接口（Interface）
+type Animal interface {
+	Sound() string
+}
+
+type Dog struct {}
+type Cat struct {}
+
+func (d Dog) Sound() string {return "汪汪"}
+func (c Cat) Sound() string {return "喵喵"}
+
+func makeSound(a Animal) {
+	fmt.Println(a.Sound)
+}
+
+makeSound(Dog{}) // 汪汪
+makeSound(Cat{}) // 喵喵
+
+// goroutine：轻量级线程
+go func() {
+	fmt.Println(“我在另一个 goroution 中运行”)
+}()							// 追加一个 () 表示立即执行
+
+// channel 创建一个数据传输管道
+ch := make(chan int)		// 一个只能传 int 的管道
+
+go func() {
+ch <- 42			        // 把42送进管道里
+}()
+
+val := <-ch					// 接收（而不是复制一个管道）
+fmt.Println(val) 			// 42
+
+
+# 赋值 a = b
+
+| 类型			 | 是什么行为
+| -------------- | ------------------ |
+| int/float/bool | 完整值拷贝
+| struct         | 逐字段值拷贝
+| array          | 整个数组拷贝
+| slice          | 复制 slice 结构，底层数组共享
+| map            | 复制引用
+| channel        | 复制引用
+| pointer        | 复制地址
