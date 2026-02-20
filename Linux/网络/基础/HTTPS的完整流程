@@ -1,0 +1,164 @@
+# 最终在网卡线上看到的封装（从外到内，典型以太网）：
+注：Dst = Destination（目标），Src = Source（源）
+
+以太网帧 Ethernet
+[Dst MAC | Src MAC | （可选 VLAN Tag）| EtherType=IPv4/IPv6 | ...payload... | FCS]
+
+payload 是 IP 包 IP
+[IP Header (Src IP, Dst IP, TTL, Proto=TCP, ... ) | ...payload...]
+
+payload 是 TCP段 TCP
+[TCP Header (Src Port, Dst Port, Seq/Ack, Flags, Window, Options, Checksum) | ...payload...]
+
+payload 是 TLS 记录 TLS Record
+[TLS Record Header (type/len/...) | Encryptd Handshake/Application Data | Auth Tag]
+
+payload 里面才是 HTTP
+"GET / ...\r\nHost: example.com\r\nCookie: ...\r\n..."
+
+# 浏览器构造的是最里面的那层 (HTTP) 以及 TLS的明文握手/加密记录; IP/TCP/MAC 都不是浏览器加的
+
+--------------------------------------------------------------------------------------------------
+
+# 按时间：每一步谁往里面加了什么？
+
+0) 浏览器准备阶段(还没发包，或只发很少包)
+- 解析 URL、决定协议（https/http）
+- 查缓存：DNS缓存、HSTS、HTTP cache、TLS session ticket（影响是否能 0-RTT/恢复）
+- 决定请求头：Host、User-Agent、Accept、Cookie、Authorization、Referer 等
+- 决定是否走代理（HTTP proxy / system proxy）
+- （ 如需要 DNS 才能连：下一步为 DNS 流程 )
+
+--------------------------------------------
+
+1) DNS解析（通常 UDP 53端口; 也可能DoH/Dot）
+
+1.1 应用层(DNS message) ：
+浏览器/系统 resolver 生成 DNS 查询报文，里面包括
+- Query NAme：域名（example.com）
+- Quert Type：A/AAAA （IPv4/IPv6）
+- 递归期望标志 RD 等
+
+1.2 OS内核
+UDP 头（传输层）
+- Src Port: 随机高端口 (临时端口)
+- Dst Port: 53
+- Length/Checksum
+
+IP 头（网络层）
+- Src IP: 本机网卡的IP
+- Dst IP: DNS服务器的IP （一般是路由器/运营商/公共DNS）
+- TTL、Protocol=17(UDP)等
+
+以太网头(网络接口层)
+- Dst MAC: 本地下一跳的 MAC（第一个通常为默认网关/路由器）
+- Src MAC：本机网卡的 MAC地址
+
+--------------------------------------------
+
+2) 建立TCP连接（三次握手）DNS得到目标服务器IP后，开始连 Dst IP:443
+
+2.1 SYN（服务器 -> 客户端）
+浏览器/应用只是在系统调用里说：“我要连接这个 IP:443 ”
+
+内核生成 TCP SYN 段：
+TCP 头（传输层）
+- Src Port：同样随机一个临时高位端口
+- Dst Port：443
+- Seq：初始序列号 ISN
+- Flags：SYN=1
+- Options (很关键，握手阶段谈性能)：MSS(最大报文段)，Window Scale（窗口扩大），SACK permitted，Timestamps（可选）
+
+IP 头（网络层）
+- Src IP：本机IP（内网）
+- Dst IP：服务器公网IP
+- TTL、Protocol=6（TCP）
+
+以太网头（MAC）（网络接口层）
+- Src MAC
+- Dst MAC （通常不可能直接是远端服务器 MAC）
+
+2.2 路由器/NAT IP映射
+到达网关后，如果本机处在私网：
+- NAT 改写：Src IP：内网IP -> 公网IP ， Src Port可能也改（端口复用）
+- NAT 更新映射表（五元组映射）
+- 重新计算相关校验 (TCP/UDP checksum 等)
+
+2.3 中间路由器每一跳
+- 以太网头会被替换（换成下一跳的 Dst MAC / 本路由器的 Src MAC）
+- IP 头基本保持端到端不变（除了 TTL 每跳 -1; 还有可能 DSCP 等被改）
+- TCP头保持不变（除非NAT/防火墙做了改写）
+
+2.4 SYN-ACK（服务器 -> 客户端）与 ACK（客户端 -> 服务器）
+- 服务器回复 SYN-ACK (带自己的 Seq，同时 ACK=客户端Seq + 1 )
+- 客户端回 ACK（三次握手完成）
+
+--------------------------------------------
+
+3) TLS握手(TLS 1.3为主; 仍然走 TCP payload)
+TLS 所有内容都在 TCP payload 中，内核只看到“要发一串字节”，并不知道这是 TLS
+
+3.1 ClientHello （客户端 -> 服务器）
+由浏览器/加密库构造，里面包括（常见关键字段）
+- 支持的TLS版本（TLS 1.3/1.2）
+- Cipher Suite (加密套件候选)
+- KeyShare (ECDHE公钥材料)
+- SNI (Server Name Indicaition: 域名，用于多站点IP)
+- ALPN (比如 h2 / http/1.1，决定后续HTTP/2 还是 1.1)
+- 支持的扩展、签名算法
+发送时，外面会套上:
+- TLS Record Header (记录层头)
+- 然后内核照常再套 TCP/IP/MAC
+
+3.2 ServerHello + 证书链 (服务器 -> 客户端)
+服务器返回(典型)：
+- ServerHello（选定版本/套件/密钥参数）
+- Certificate（ 服务器证书 + 中间 CA）
+- CertificateVerify / Finished （证明握手完整性）
+根CA 一般不发，因为客户端系统内置
+
+3.3 客户端验证证书时一般会检查：域名匹配（证书SAN/CN），有效期，信任链（中间CA -> 根CA），吊销状态（OCSP/CRL; 也可能 OCSP stapling）
+OCSP/CRL 可能会额外引发网络请求（又是一组 DNS/HTTP/HTTPS 流程），这点会在抓包时看到旁路请求
+
+3.4 共享密钥怎么来的？
+TLS 1.3 常用 ECDHE：
+- 双方交换 KeyShare 公钥
+- 各自用私钥 + 对方公钥计算出同一共享秘密
+- 再派生出对称密钥
+之后：
+- HTTP数据 会被加密成 TLS Application Data，再塞进 TCP payload
+
+--------------------------------------------
+
+4) 发送 HTTP请求（ 此时已经是加密后的 TLS应用数据 ）
+
+4.1 浏览器生成HTTP请求内容（以HTTP/1.1为例子）
+- 请求行：GET /path HTTP/1.1
+- 头部（Host, User-Agent, Accept, Cookie, Content-Type / Content-Length(如果有body)，）
+- Body (POST/PUT 等...)
+如果是 HTTP/2 / HTTP/3，会变成 帧/QUIC 数据结构，但浏览器逻辑类似：仍然是“生成应用层语义”，然后交给下层封装/加密
+
+4.2 从HTTP明文 到 线上包 的过程
+- TLS：把 HTTP明文 封装进 TLSrecord，并加密/加tag
+- 内核：把加密后的字节流切成 TCP segments （按MSS）
+- 逐帧加 TCP/IP/MAC 发出
+
+--------------------------------------------
+
+5) 数据传输这的 ACK、窗口、重传
+这些都是 TCP 的工作（内核处理）：
+- ACK （累计确认）
+- 滑动窗口 （流量控制）
+- 拥塞控制 （慢启动等）
+- 丢包重传 （超时/快速重传）
+TLS 不负责可靠性; TLS只是 加密 + 完整性
+
+--------------------------------------------
+
+6) 关闭连接：FIN / ACK / TIME_WAIT
+常见四次挥手：
+- 主动关闭发：FIN
+- 被动方：ACK
+- 被动方处理完：FIN
+- 主动方： ACK -> 进入 TIME_WAIT
+TIME_WAIT 在主动关闭方
