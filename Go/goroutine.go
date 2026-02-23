@@ -26,8 +26,13 @@ func main(){
 
 
 // channel (goroutine 间通信的管道)
-ch1 := make(chan int)              // 默认是阻塞 (只能塞一个数据，没人发送 -> 接收阻塞，没人接收 -> 发送阻塞)
+ch1 := make(chan int)             // 默认是阻塞 (只能塞一个数据，没人发送 -> 接收阻塞，没人接收 -> 发送阻塞)
 ch2 := make(chan int,2)           // 有缓冲，可以存两个值再阻塞
+
+for v,ok := range ch2 {           // range 读取channel，需要close(ch2),如果channel没有关闭，会导致range一直等待，无法执行break
+  fmt.Println(v)
+}
+
 
 // select(可以监听多个channel,谁先准备好执行谁)
 select {
