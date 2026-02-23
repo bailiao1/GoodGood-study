@@ -1,4 +1,4 @@
-pack age main        // 每个 Go 文件必须属于一个包（package），程序入口是 main包的 main()函数
+package main        // 每个 Go 文件必须属于一个包（package），程序入口是 main包的 main()函数
 
 import "fmt"        // 导入库
 
