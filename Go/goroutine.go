@@ -23,3 +23,50 @@ func main(){
 }
 // 最终可能输出 A B ，也可能只输出 B（因为 main结束，程序退出，而 goroutine 还没来得及跑）
 // goroutine 的本质不是传统线程，而是由 Go runtine 管理的协程，特点是：启动成本极低，栈空间初始很小（几 kb），可以开几十万
+
+
+// channel (goroutine 间通信的管道)
+ch1 := make(chan int)              // 默认是阻塞 (只能塞一个数据，没人发送 -> 接收阻塞，没人接收 -> 发送阻塞)
+ch2 := make(chan int,2)           // 有缓冲，可以存两个值再阻塞
+
+// select(可以监听多个channel,谁先准备好执行谁)
+select {
+case v := <-ch1:
+  fmt.Println(v)
+case v := <-ch2:
+  fmt.Println(v)
+}
+// 常见用途：超时控制
+select {
+case v := <-ch:
+  fmt.Println(v)
+case <-time.After(2 * time.Secod):
+  fmt.Println("timeout")
+}
+
+
+// sync.Mutex (互斥锁，用于多个 goroutine 访问同一个变量,避免数据竞争)
+var mu sync.Mutex
+mu.Lock()
+count++
+mu.Unlock()
+
+
+// context(用于控制超时，取消任务，传递请求范围数据)
+ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)    // 创建
+defer cancel()
+// 传入函数
+func doWork(ctx context.Context)
+// 监听取消
+select {
+case <-ctx.Done():
+  return
+}
+
+
+// 整体关系：
+- goroutine -> 并发执行单元
+- channel -> goroutine之间传话
+- select -> 同时监听多个通道
+- mutex -> 保护共享变量
+- context -> 管理 groutine 生命周期 
