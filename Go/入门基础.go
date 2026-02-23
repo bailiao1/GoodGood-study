@@ -10,7 +10,7 @@ func main() {
 
 // 变量声明
 var name string = "Bai"      // 完整版var + 类型声明
-age := "19"                  // 简短声明，自动判断类型
+age := "19"                  // 简短声明，自动判断类型 (只能在函数内使用，如 main)
 
 // 常量
 const Pi = 1.14159
@@ -138,7 +138,7 @@ go func() {
 }()							// 追加一个 () 表示立即执行
 
 // channel 创建一个数据传输管道
-ch := make(chan int)		// 一个只能传 int 的管道
+ch := make(chan int)		// 一个只能传 int 的管道 (默认是单通道阻塞)
 
 go func() {
 ch <- 42			        // 把42送进管道里
@@ -159,3 +159,8 @@ fmt.Println(val) 			// 42
 | map            | 复制引用
 | channel        | 复制引用
 | pointer        | 复制地址
+
+
+# deper 延迟执行（函数结束前执行）
+file,_ := os.open("a.txt")
+deper file.close()
