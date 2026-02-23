@@ -34,6 +34,13 @@ for i := 0; i < 5; i++ {
     fmt.Println(i)
 }
 
+// range (读取已存在结构)
+nums := []int{10,20,30}
+for i,v := range nums {			// i 是索引，v 是值
+	fmt.Println(1,v)			// 0 10, 1 20, 2 30
+}
+
+
 // switch
 switch city {
 case "Beijing":
@@ -77,7 +84,7 @@ s = append(s,4,5)
 fmt.Println(s)      // [1 2 3 4 5]
 fmt.Println(s[1:3]) // [2 3] 依旧包头不包尾
 
-// Map 字典
+// Map 字典(无序)
 m := map[string]int{
     "apple":5.
     "banana:3,
