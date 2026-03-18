@@ -55,3 +55,35 @@ df.groupby(['产品', '地区'])['销售额'].mean()
 # 3. 使用 agg 同时计算总和与计数
 df.groupby('产品')['销售额'].agg(['sum', 'count'])
 
+
+# 时间数据
+df = pd.DataFrame({"date": ["2025-01-01","2025-02-01"]})
+df["date"] = pd.to_datetime(df["date"])
+
+# 提取时间信息（用.dt访问时间属性）
+df["year"] = df["date"].dt.year
+df["month"] = df["date"].dt.month
+df["day"] = df["date"].dt.day
+df["weekday"] = df["date"].dt.weekday
+
+# 时间筛选
+df[df["date"] > "2025-01-15"]
+df[df["data"] >= "2025-01-01" & (df["date"] <= "2024-01-31")]
+
+# 设置时间索引
+df = df.set_index("date")
+# - 之后可以使用
+df.loc["2025-01-01":"2025-01-31"]    # 检索 2025-1-1 到 2025-1-31 的信息
+
+# 时间重采样（日D，月M，年Y，小时H）
+df.resample("M").sum()     # 按月
+df.resample("D").mean()    # 按日
+
+# 时间偏移(加减时间)
+df["date"] + pd.Timedelta(days=1)
+df["date"] - pd.Timedelta(hours=2)
+
+# 时间差计算
+df["diff"] = df["date"].diff()                  # df.diff(periods=1, axis=0) 计算元素与同一轴上 前一个元素 的差值
+df["gap"] = df["date"] - df["date"].shift(1)    # df.shift(periods=1,axis=0) 将数据沿指定轴平移指定步数
+
