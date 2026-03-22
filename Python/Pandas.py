@@ -4,11 +4,13 @@ import pandas as pd
 s = pd.Series([10,20,30])
 print(s)
 
-#ＤataFrame（表格）
+# DataFrame（表格）
 df = pd.DataFrame({
   "name": ["Bai","Hei"],
   "age": [25,30]
 })
+
+df.squeeze()   # 如果只有一列 → 自动变 Series，如果多行不变
 
 # 读取数据
 df = pd.read_csv("data.csv")
