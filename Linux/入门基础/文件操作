@@ -48,6 +48,9 @@ ln -s sit_a/file.txt sit_e/     # 将a目录下的file文件创建软链接到e�
 
 # 查看文件
 cat file.txt           # 显示整个文件
+cat -                  # 从标准输入读取，输入什么就输出什么
+cat ./-                # 输入路径，显示-文件
+
 less file.txt          # 分页查看（可向前也能向后 1 <-> 2）
 more file.txt          # 分页查看（只能前向查看 1 -> 2）
 
