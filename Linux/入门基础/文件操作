@@ -11,6 +11,15 @@ ls -lt      # 按修改时间排序
 ls -ltr     # 按修改时间倒序
 ls /home    # 列出指定目录
 
+file *      # 判断当前目录所有文件（除隐藏文件）的类型
+
+# 搜索文件
+find . -type f -size 1033c ! executable
+.              从当前目录开始找
+-type f        只找普通文件
+-size 1033c    文件大小正好是1033字节， c表示bytes
+! excutable    排除可执行文件
+
 # 切换目录
 cd /home/user      # "/" 绝对路径
 cd Documents       # 相对路径
