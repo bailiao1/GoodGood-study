@@ -20,6 +20,11 @@ find . -type f -size 1033c ! executable
 -size 1033c    文件大小正好是1033字节， c表示bytes
 ! excutable    排除可执行文件
 
+find / -user bai -group people -size 33c 2>/dev/null
+/              从根目录开始找
+-user          文件所有者
+-group         文件所属组
+2>/dev/null    把没权限访问的报错隐藏掉
 # 切换目录
 cd /home/user      # "/" 绝对路径
 cd Documents       # 相对路径
