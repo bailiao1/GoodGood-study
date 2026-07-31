@@ -49,6 +49,11 @@ rmdir new_floder           # 只删除空目录（非空会报错）
 rm new_floder/*      # 删除所有文件（不包括子目录与子目录中的文件，单个*只能向下一层）
 rm -r new_floder/*   # 删除所有文件和子目录
 
+# 随机创建临时目录
+tmpdir=$(mktemp -d)      # 创建一个随机名字的临时目录，比如 /tmp/tmp.Xa82KLm9Qp 并把这个路径保存到变量 tmpdir中 
+cp data.txt "$tmpdir"    # 把文件复制到变量存储的路径
+cd "$tmpdir"             # 进入到这个临时目录
+
 # 复制与移动
 cp file.txt file_backuo.txt     # 复制file并在当前目录创建一个file_backuo（如果已有，即覆盖）
 cp file.txt floder1/            # 复制到floder1下
@@ -98,6 +103,27 @@ grep -r "xxx" floed/   # 递归在某目录中搜索
 grep -i                # 忽略大小写差异
 grep -n                # 显示行号
 
+# tr 字符替换/删除
+cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'    # 解ROT13编码
+
+# 从二进制文件中提取可读字符串
+strings data.txt
+strings data.txt | grep ===
+
+# Base64 编码/解码
+base64 -d data.txt     # 解码data文件
+
+# xxd 十六进制查看/还原文件（可以把二进制转成十六进场，也可以反向还原）
+xxd data.txt
+xxd -r data.txt data   # 将十六进制转回原始二进制文件
+
+# 打包/解包
+tar -xf data.tar       # -x 解包，-f 指定文件
+tar -tf data.tar       # -t 查看包里有什么（-v 显示过程）
+gzip -d data.gz        # 处理 .gz 压缩文件
+bzip2 -d data.bz2      # 处理 .bz2 压缩文件
+
+
 # 排序
 sort file.txt          # 默认按各行开头字母排序
 sort -n                # 按数字排序
@@ -111,6 +137,8 @@ sort -k2,2             # 只看第二列字段（从2开始，到2结束）
 sort -t,               # 用"，"作为分隔符
 
 uniq -c                # 把连续重复的行去重，并统计出现次数（常需要和sort配合，uniq只去重相邻且相同，不考虑重复内容分散在文件不同处）
+uniq -u                # 只显示出现一次的行
+uniq -d                # 只显示重复出现的行
 
 # 计数
 wc file.txt            # 统计行数，单词数，字节数
