@@ -51,6 +51,10 @@ cat file.txt           # 显示整个文件
 cat -                  # 从标准输入读取，输入什么就输出什么
 cat ./-                # 输入路径，显示-文件
 
+cat "./--spaces in this filename--"    
+# 当目标文件的名称带有空格，直接输入会被拆成多段命令，需要使用 "" 
+或者 或者用反斜杠转义空格：cat ./--spaces\ in\ this\ filename--
+
 less file.txt          # 分页查看（可向前也能向后 1 <-> 2）
 more file.txt          # 分页查看（只能前向查看 1 -> 2）
 
